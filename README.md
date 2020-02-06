@@ -1,4 +1,15 @@
-# Requirements:
+
+![Earnest](https://imgur.com/0mZDs6m.png)
+
+> # **Web App Demo**
+
+- **Prepared By:** Jeffry Milan
+- **Demo On:** Feb 06, 2020
+
+> <i class="fa fa-tags" aria-hidden="true"></i>tags: `rds` `nginx` `elb` `terraform` `aws`
+
+
+# Earnest Requirements:
 Please configure the following test environment in AWS Region -
 **us-west-2 (Oregon)**
 
@@ -1753,7 +1764,10 @@ infrastructure, so keep it safe. To inspect the complete state
 use the `terraform show` command.
 
 State path: terraform.tfstate
+```
 
+### Results: 
+```
 Outputs:
 
 alb_dns_name = iac-dev-asg-elb-1149699757.us-west-2.elb.amazonaws.com
@@ -1793,7 +1807,7 @@ replicas_host =
 vpc_cidr = 10.0.0.0/16
 ```
 
-### Test Access
+### Check Endpoint: 
 Once `terraform apply` is `successful`, you will see the `elb_dns_name` configured as a part of output. you can hit `elb_dns_name` in your browser and should see the sample response from nginx container deployed or you can access `elb_dns_name` from CLI as well as given below.
 
 ```
@@ -1809,6 +1823,11 @@ while true; do curl -s -o /dev/null -w "%{http_code} => OK\n" iac-dev-asg-elb-11
 200 => OK
 200 => OK
 ```
+
+### Web App - powered by: Docker with Nginx: 
+
+![Earnest](https://imgur.com/ZrwaHzO.png)
+
 ### Destroy Infrastructure(clean-up)
 
 This is not yet done.
