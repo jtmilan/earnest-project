@@ -79,7 +79,7 @@ Terraform’s approach is to allow you to write code that is specific to each pr
 # Quick Start
 Terraform 0.11 or greater is required. The most simple configuration is below (the values used for the variables are actually the defaults, so could be omitted):
 
-```
+```shell
 terraform {
   required_version = "~> 0.12.0"
 
@@ -96,14 +96,14 @@ terraform {
 ## Prerequisites 
 
 AWS CLI configured required IAM access.
-```
+```shell
 $ export AWS_ACCESS_KEY_ID=(your access key id)
 $ export AWS_SECRET_ACCESS_KEY=(your secret access key)
 
 ```
 
 Terraform Installed on your local workstation.
-```
+```shell
 On MAC: 
 Terminal: $brew install terraform
 
@@ -123,7 +123,7 @@ https://learn.hashicorp.com/terraform/getting-started/install.html
 * We are also creating RDS Postgresql Aurora cluster.
 
 ### Clone repository
-```
+```shell
 $ git clone https://github.com/jtmilan/earnest-project.git
 cd earnest-project
 ```
@@ -131,7 +131,7 @@ cd earnest-project
 ## Setup 
 
 ### Initialize terraform
-```
+```shell
 $ terraform init
 
 Initializing modules...
@@ -152,7 +152,7 @@ commands will detect it and remind you to do so if necessary.
 ```
 
 ### Terraform Plan (dry-run)
-```
+```yaml
 $ terraform plan -var-file=iac-cluster.tfvars -out=./plan/iac-cluster.plan
 
 Refreshing Terraform state in-memory prior to plan...
@@ -1504,7 +1504,7 @@ To perform exactly these actions, run the following command to apply:
 If everything looks good, from `terraform plan` then apply real changes using `terraform apply`
 
 ### Apply terraform (Create Cluster)
-```
+```yaml
 $ terraform apply "./plan/iac-cluster.plan"
 
 module.aws_key_pair.tls_private_key.default[0]: Creating...
@@ -1767,7 +1767,7 @@ State path: terraform.tfstate
 ```
 
 ### Results: 
-```
+```yaml
 Outputs:
 
 alb_dns_name = iac-dev-asg-elb-1149699757.us-west-2.elb.amazonaws.com
@@ -1810,7 +1810,7 @@ vpc_cidr = 10.0.0.0/16
 ### Check Endpoint: 
 Once `terraform apply` is `successful`, you will see the `elb_dns_name` configured as a part of output. you can hit `elb_dns_name` in your browser and should see the sample response from nginx container deployed or you can access `elb_dns_name` from CLI as well as given below.
 
-```
+```bash
 while true; do curl -s -o /dev/null -w "%{http_code} => OK\n" iac-dev-asg-elb-1149699757.us-west-2.elb.amazonaws.com; done
 
 200 => OK
@@ -1826,7 +1826,199 @@ while true; do curl -s -o /dev/null -w "%{http_code} => OK\n" iac-dev-asg-elb-11
 
 ### Web App - powered by: Docker with Nginx: 
 
-![Earnest](https://imgur.com/ZrwaHzO.png)
+> http://iac-dev-asg-elb-1149699757.us-west-2.elb.amazonaws.com
+
+![WebApp](https://imgur.com/ZrwaHzO.png)
+
+
+### Terraform State File ( Private API)
+The state file format is a private API that changes with every release and is meant only for internal use within Terraform. You should never edit the Terraform state files by hand or write code that reads them directly.
+
+```yaml 
+$ terraform init -backend-config=backend.hcl
+
+Initializing modules...
+
+Initializing the backend...
+
+Initializing provider plugins...
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+```
+
+```yaml
+$ terraform plan -var-file=iac-cluster.tfvars -out=./plan/iac-cluster.plan
+
+Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # aws_dynamodb_table.iac-cluster-locks will be created
+  + resource "aws_dynamodb_table" "iac-cluster-locks" {
+      + arn              = (known after apply)
+      + billing_mode     = "PAY_PER_REQUEST"
+      + hash_key         = "LockID"
+      + id               = (known after apply)
+      + name             = "iac-cluster-tfstate-locks"
+      + stream_arn       = (known after apply)
+      + stream_label     = (known after apply)
+      + stream_view_type = (known after apply)
+
+      + attribute {
+          + name = "LockID"
+          + type = "S"
+        }
+
+      + point_in_time_recovery {
+          + enabled = (known after apply)
+        }
+
+      + server_side_encryption {
+          + enabled     = (known after apply)
+          + kms_key_arn = (known after apply)
+        }
+    }
+
+  # aws_s3_bucket.iac-cluster-state will be created
+  + resource "aws_s3_bucket" "iac-cluster-state" {
+      + acceleration_status         = (known after apply)
+      + acl                         = "private"
+      + arn                         = (known after apply)
+      + bucket                      = "iac-cluster-tfstate"
+      + bucket_domain_name          = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + server_side_encryption_configuration {
+          + rule {
+              + apply_server_side_encryption_by_default {
+                  + sse_algorithm = "AES256"
+                }
+            }
+        }
+
+      + versioning {
+          + enabled    = true
+          + mfa_delete = false
+        }
+    }
+
+  # module.iac-dev-ecp.aws_launch_template.default[0] will be updated in-place
+  ~ resource "aws_launch_template" "default" {
+        arn                                  = "arn:aws:ec2:us-west-2::launch-template/lt-0d2cbcb24c185bc4f"
+        default_version                      = 1
+        disable_api_termination              = false
+        ebs_optimized                        = "false"
+        id                                   = "lt-0d2cbcb24c185bc4f"
+        image_id                             = "ami-0d1cd67c26f5fca19"
+        instance_initiated_shutdown_behavior = "terminate"
+        instance_type                        = "t2.micro"
+        key_name                             = "iac-dev-iac-cluster"
+      ~ latest_version                       = 1 -> (known after apply)
+        name                                 = "iac-dev-ec2-asg-20200206193549778400000001"
+        name_prefix                          = "iac-dev-ec2-asg-"
+        security_group_names                 = []
+        tags                                 = {
+            "Name"      = "iac-dev-ec2"
+            "Namespace" = "iac"
+            "Owner"     = "Terraform"
+            "Stage"     = "dev"
+            "Tier"      = "1"
+        }
+        user_data                            = "IyEvdXNyL2Jpbi9lbnYgYmFzaAoKaWYgWyAiJCguIC9ldGMvb3MtcmVsZWFzZTsgZWNobyAkTkFNRSkiID0gIlVidW50dSIgXTsgdGhlbgogIGFwdC1nZXQgdXBkYXRlCiAgYXB0LWdldCAteSBpbnN0YWxsIGZpZ2xldAogIFNTSF9VU0VSPXVidW50dQplbHNlCiAgeXVtIGluc3RhbGwgZXBlbC1yZWxlYXNlIC15CiAgeXVtIGluc3RhbGwgZmlnbGV0IC15CiAgU1NIX1VTRVI9ZWMyLXVzZXIKZmkKIyBHZW5lcmF0ZSBzeXN0ZW0gYmFubmVyCmZpZ2xldCAiV2VsY29tZSB0byBDb250cm9sIFNlcnZlciIgPiAvZXRjL21vdGQKCgojIwojIyBTZXR1cCBTU0ggQ29uZmlnCiMjCmNhdCA8PCJfX0VPRl9fIiA+IC9ob21lL1NTSF9VU0VSLy5zc2gvY29uZmlnCkhvc3QgKgogICAgU3RyaWN0SG9zdEtleUNoZWNraW5nIG5vCl9fRU9GX18KY2htb2QgNjAwIC9ob21lLyRTU0hfVVNFUi8uc3NoL2NvbmZpZwpjaG93biAkU1NIX1VTRVI6JFNTSF9VU0VSIC9ob21lL1NTSF9VU0VSLy5zc2gvY29uZmlnCgojIwojIyBTZXR1cCBIVE1MCiMjCnN1ZG8gbWtkaXIgLXAgL29wdC9pYWMKc3VkbyBjaG93biAtUiBhZG1pbi5hZG1pbiAvb3B0L2lhYwpjYXQgPDwiX19FT0ZfXyIgPiAvb3B0L2lhYy9pbmRleC5odG1sCjxoMT5EYXRhYmFzZSBJbmZvOiA8L2gxPgo8cD48c3Ryb25nPlBvc3RncmVTUUwgRW5kb2ludDo8L3N0cm9uZz4gaWFjLWRldi1yZHMuY2x1c3Rlci1jbGpzN2RlcWZmcGUudXMtd2VzdC0yLnJkcy5hbWF6b25hd3MuY29tPC9wPgo8cD48c3Ryb25nPlBvc3RncmVTUUwgSW5zdGFuY2U6PC9zdHJvbmc+IGlhY19kYjwvcD4KCjxmb290ZXI+CiAgPHA+PHN0cm9uZz5Qb3N0ZWQgYnk6PC9zdHJvbmc+IEplZmZyeSBNaWxhbjwvcD4KICA8cD48c3Ryb25nPkNvbnRhY3QgaW5mb3JtYXRpb246PC9zdHJvbmc+IDxhIGhyZWY9Im1haWx0bzpqZWZmcnkubWlsYW5AZ21haWwuY29tIj5qdG1pbGFuQGdtYWlsLmNvbTwvYT4uPC9wPgo8L2Zvb3Rlcj4KPHA+PHN0cm9uZz5Ob3RlOjwvc3Ryb25nPiBUaGUgZW52aXJvbm1lbnQgc3BlY2lmaWVkIGlzIGEgbmFpdmUgcmVwcmVzZW50YXRpb24gb2YgYSB3ZWIgYXBwbGljYXRpb24gd2l0aCBhIGRhdGFiYXNlIGJhY2tlbmQuPC9wPgpfX0VPRl9fCgojIS9iaW4vYmFzaAphcHQtZ2V0IHVwZGF0ZQphcHQgLXkgaW5zdGFsbCBuZ2lueAphcHQgLXkgaW5zdGFsbCBkb2NrZXIuaW8KdWZ3IGFsbG93ICdOZ2lueCBIVFRQJwpzeXN0ZW1jdGwgc3RhcnQgZG9ja2VyCnN5c3RlbWN0bCBlbmFibGUgZG9ja2VyCmRvY2tlciBydW4gLS1uYW1lIGlhYy1uZ2lueCAtLXJlc3RhcnQ9dW5sZXNzLXN0b3BwZWQgLXYgL29wdC9pYWM6L3Vzci9zaGFyZS9uZ2lueC9odG1sOnJvIC1kIC1wIDgwODA6ODAgbmdpbngKCg=="
+        vpc_security_group_ids               = []
+
+      + iam_instance_profile {}
+
+        monitoring {
+            enabled = true
+        }
+
+        network_interfaces {
+            associate_public_ip_address = "true"
+            delete_on_termination       = true
+            description                 = "iac-dev-ec2-asg"
+            device_index                = 0
+            ipv4_address_count          = 0
+            ipv4_addresses              = []
+            ipv6_address_count          = 0
+            ipv6_addresses              = []
+            security_groups             = [
+                "sg-0011d0ea96268d7e4",
+            ]
+        }
+
+        tag_specifications {
+            resource_type = "volume"
+            tags          = {
+                "Name"      = "iac-dev-ec2"
+                "Namespace" = "iac"
+                "Owner"     = "Terraform"
+                "Stage"     = "dev"
+                "Tier"      = "1"
+            }
+        }
+        tag_specifications {
+            resource_type = "instance"
+            tags          = {
+                "Name"      = "iac-dev-ec2"
+                "Namespace" = "iac"
+                "Owner"     = "Terraform"
+                "Stage"     = "dev"
+                "Tier"      = "1"
+            }
+        }
+    }
+
+Plan: 2 to add, 1 to change, 0 to destroy.
+
+
+
+------------------------------------------------------------------------
+
+This plan was saved to: ./plan/iac-cluster.plan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "./plan/iac-cluster.plan"
+```
+```
+$ terraform apply "./plan/iac-cluster.plan"
+aws_dynamodb_table.iac-cluster-locks: Creating...
+aws_s3_bucket.iac-cluster-state: Creating...
+module.iac-dev-ecp.aws_launch_template.default[0]: Modifying... [id=lt-0d2cbcb24c185bc4f]
+module.iac-dev-ecp.aws_launch_template.default[0]: Modifications complete after 7s [id=lt-0d2cbcb24c185bc4f]
+aws_s3_bucket.iac-cluster-state: Still creating... [10s elapsed]
+aws_dynamodb_table.iac-cluster-locks: Still creating... [10s elapsed]
+aws_dynamodb_table.iac-cluster-locks: Still creating... [20s elapsed]
+aws_s3_bucket.iac-cluster-state: Still creating... [20s elapsed]
+aws_dynamodb_table.iac-cluster-locks: Creation complete after 22s [id=iac-cluster-tfstate-locks]
+aws_s3_bucket.iac-cluster-state: Still creating... [30s elapsed]
+aws_s3_bucket.iac-cluster-state: Creation complete after 40s [id=iac-cluster-tfstate]
+
+Apply complete! Resources: 2 added, 1 changed, 0 destroyed.
+```
 
 ### Destroy Infrastructure(clean-up)
 
