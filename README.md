@@ -1,5 +1,5 @@
 
-![Earnest](https://imgur.com/0mZDs6m.png)
+<!-- ![Earnest](https://imgur.com/0mZDs6m.png) -->
 
 > # **Web App Demo**
 
@@ -34,6 +34,61 @@ This will create an  Web App cluster, made up of a set of three nodes in an auto
 
 ![Architecture Diagram](https://imgur.com/fSAxQIO.jpg)
 
+# Terraform Diagram
+```shell
+$ terraform  graph  | grep -v -E "meta|module|output|var|null"
+```
+
+```groovy=
+Output: 
+
+digraph {
+        compound = "true"
+        newrank = "true"
+        subgraph "root" {
+                "[root] aws_dynamodb_table.iac-cluster-locks" [label = "aws_dynamodb_table.iac-cluster-locks", shape = "box"]
+                "[root] aws_elb.iac-dev-asg-elb" [label = "aws_elb.iac-dev-asg-elb", shape = "box"]
+                "[root] aws_s3_bucket.iac-cluster-state" [label = "aws_s3_bucket.iac-cluster-state", shape = "box"]
+                "[root] aws_security_group.iac-dev-ec2-sg" [label = "aws_security_group.iac-dev-ec2-sg", shape = "box"]
+                "[root] aws_security_group.iac-dev-rds-sg" [label = "aws_security_group.iac-dev-rds-sg", shape = "box"]
+                "[root] aws_security_group_rule.egress" [label = "aws_security_group_rule.egress", shape = "box"]
+                "[root] aws_security_group_rule.ingress" [label = "aws_security_group_rule.ingress", shape = "box"]
+                "[root] aws_security_group_rule.rds_egress" [label = "aws_security_group_rule.rds_egress", shape = "box"]
+                "[root] aws_security_group_rule.rds_ingress" [label = "aws_security_group_rule.rds_ingress", shape = "box"]
+                "[root] aws_security_group_rule.rds_ingress_dynamic" [label = "aws_security_group_rule.rds_ingress_dynamic", shape = "box"]
+                "[root] data.template_file.rds" [label = "data.template_file.rds", shape = "box"]
+                "[root] data.template_file.user_data" [label = "data.template_file.user_data", shape = "box"]
+                "[root] provider.aws" [label = "provider.aws", shape = "diamond"]
+                "[root] provider.template" [label = "provider.template", shape = "diamond"]
+                "[root] aws_dynamodb_table.iac-cluster-locks" -> "[root] provider.aws"
+                "[root] aws_elb.iac-dev-asg-elb" -> "[root] aws_security_group.iac-dev-ec2-sg"
+                "[root] aws_s3_bucket.iac-cluster-state" -> "[root] provider.aws"
+                "[root] aws_security_group_rule.egress" -> "[root] aws_security_group.iac-dev-ec2-sg"
+                "[root] aws_security_group_rule.ingress" -> "[root] aws_security_group.iac-dev-ec2-sg"
+                "[root] aws_security_group_rule.rds_egress" -> "[root] aws_security_group.iac-dev-rds-sg"
+                "[root] aws_security_group_rule.rds_ingress" -> "[root] aws_security_group.iac-dev-rds-sg"
+                "[root] aws_security_group_rule.rds_ingress_dynamic" -> "[root] aws_security_group.iac-dev-rds-sg"
+                "[root] data.template_file.rds" -> "[root] provider.template"
+                "[root] data.template_file.user_data" -> "[root] provider.template"
+                "[root] provider.aws (close)" -> "[root] aws_dynamodb_table.iac-cluster-locks"
+                "[root] provider.aws (close)" -> "[root] aws_s3_bucket.iac-cluster-state"
+                "[root] provider.aws (close)" -> "[root] aws_security_group_rule.egress"
+                "[root] provider.aws (close)" -> "[root] aws_security_group_rule.ingress"
+                "[root] provider.aws (close)" -> "[root] aws_security_group_rule.rds_egress"
+                "[root] provider.aws (close)" -> "[root] aws_security_group_rule.rds_ingress"
+                "[root] provider.aws (close)" -> "[root] aws_security_group_rule.rds_ingress_dynamic"
+                "[root] provider.template (close)" -> "[root] data.template_file.rds"
+                "[root] provider.template (close)" -> "[root] data.template_file.user_data"
+                "[root] root" -> "[root] provider.aws (close)"
+                "[root] root" -> "[root] provider.local (close)"
+                "[root] root" -> "[root] provider.template (close)"
+                "[root] root" -> "[root] provider.tls (close)"
+                "[root] root" -> "[root] provisioner.local-exec (close)"
+        }
+}
+```
+
+![Architecture Diagram](https://imgur.com/8YPhu9T.png)
 
 # Technology Used:
 Creating stacks in **AWS** makes it simple by deploying using **Terraform**. 
