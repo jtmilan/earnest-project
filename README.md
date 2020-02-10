@@ -186,15 +186,61 @@ cd earnest-project
 ## Setup 
 
 ### Initialize terraform
-```shell
-$ terraform init
 
+```shell
+#with state
+$ terraform init -backend-config=backend.hcl
+
+#without state - Please use this one
+$ terraform init
+```
+
+
+```shell
 Initializing modules...
-...truncated
+Downloading git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=master for aws_key_pair...
+- aws_key_pair in .terraform/modules/aws_key_pair
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.16.0 for aws_key_pair.label...
+- aws_key_pair.label in .terraform/modules/aws_key_pair.label
+Downloading git::https://github.com/cloudposse/terraform-aws-ec2-autoscale-group.git?ref=master for iac-dev-ecp...
+- iac-dev-ecp in .terraform/modules/iac-dev-ecp
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.15.0 for iac-dev-ecp.label...
+- iac-dev-ecp.label in .terraform/modules/iac-dev-ecp.label
+Downloading git::https://github.com/cloudposse/terraform-aws-rds-cluster.git?ref=master for rds_cluster...
+- rds_cluster in .terraform/modules/rds_cluster
+Downloading git::https://github.com/cloudposse/terraform-aws-route53-cluster-hostname.git?ref=tags/0.3.0 for rds_cluster.dns_master...
+- rds_cluster.dns_master in .terraform/modules/rds_cluster.dns_master
+Downloading git::https://github.com/cloudposse/terraform-aws-route53-cluster-hostname.git?ref=tags/0.3.0 for rds_cluster.dns_replicas...
+- rds_cluster.dns_replicas in .terraform/modules/rds_cluster.dns_replicas
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.16.0 for rds_cluster.label...
+- rds_cluster.label in .terraform/modules/rds_cluster.label
+Downloading git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=master for subnets...
+- subnets in .terraform/modules/subnets
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.14.0 for subnets.label...
+- subnets.label in .terraform/modules/subnets.label
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.14.0 for subnets.nat_instance_label...
+- subnets.nat_instance_label in .terraform/modules/subnets.nat_instance_label
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.14.0 for subnets.nat_label...
+- subnets.nat_label in .terraform/modules/subnets.nat_label
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.14.0 for subnets.private_label...
+- subnets.private_label in .terraform/modules/subnets.private_label
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.14.0 for subnets.public_label...
+- subnets.public_label in .terraform/modules/subnets.public_label
+Downloading git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=master for vpc...
+- vpc in .terraform/modules/vpc
+Downloading git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.14.0 for vpc.label...
+- vpc.label in .terraform/modules/vpc.label
+
 Initializing the backend...
-...truncated
+
 Initializing provider plugins...
-...truncated
+- Checking for available provider plugins...
+- Downloading plugin for provider "tls" (hashicorp/tls) 2.1.1...
+- Downloading plugin for provider "null" (hashicorp/null) 2.1.2...
+- Downloading plugin for provider "template" (hashicorp/template) 2.1.2...
+- Downloading plugin for provider "local" (hashicorp/local) 1.4.0...
+- Downloading plugin for provider "aws" (hashicorp/aws) 2.48.0...
+
 Terraform has been successfully initialized!
 
 You may now begin working with Terraform. Try running "terraform plan" to see
@@ -207,38 +253,42 @@ commands will detect it and remind you to do so if necessary.
 ```
 
 ### Terraform Plan (dry-run)
-```yaml
+
+```shell
 $ terraform plan -var-file=iac-cluster.tfvars -out=./plan/iac-cluster.plan
+```
+
+```yaml
 
 Refreshing Terraform state in-memory prior to plan...
 The refreshed state will be used to calculate this plan, but will not be
 persisted to local or remote state storage.
 
-module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
-module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
-module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[4]: Refreshing state...
-module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
 module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
 module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
 module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
-module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
-module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[4]: Refreshing state...
+module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
 module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
 module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
-module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
-module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
-module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[4]: Refreshing state...
-module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
-module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
-module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
-module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
-module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
-module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
-module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
-module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
-module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
 module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
 module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
+module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
+module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[4]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
 module.subnets.data.aws_availability_zones.available: Refreshing state...
 
 ------------------------------------------------------------------------
@@ -257,13 +307,13 @@ Terraform will perform the following actions:
       + rendered = (known after apply)
       + template = <<~EOT
             #!/bin/bash -xe
-
-            sudo apt-get update -y
-
+            
+            sudo apt-get update -y 
+            
             # install docker
             sudo curl https://releases.rancher.com/install-docker/17.03.sh | sh
             sudo usermod -a -G docker admin
-
+            
             # Run wordpress container that connects with RDS cluster.
             sudo docker run --name iac-wordpress -e WORDPRESS_DB_HOST="${rds_endpoint}" -e WORDPRESS_DB_USER=rdsuser -e WORDPRESS_DB_PASSWORD=rdspassword -d wordpress
         EOT
@@ -280,7 +330,7 @@ Terraform will perform the following actions:
       + rendered = (known after apply)
       + template = <<~EOT
             #!/usr/bin/env bash
-
+            
             if [ "$(. /etc/os-release; echo $NAME)" = "Ubuntu" ]; then
               apt-get update
               apt-get -y install figlet
@@ -292,8 +342,8 @@ Terraform will perform the following actions:
             fi
             # Generate system banner
             figlet "${welcome_message}" > /etc/motd
-
-
+            
+            
             ##
             ## Setup SSH Config
             ##
@@ -303,7 +353,7 @@ Terraform will perform the following actions:
             __EOF__
             chmod 600 /home/$SSH_USER/.ssh/config
             chown $SSH_USER:$SSH_USER /home/SSH_USER/.ssh/config
-
+            
             ##
             ## Setup HTML
             ##
@@ -313,14 +363,14 @@ Terraform will perform the following actions:
             <h1>Database Info: </h1>
             <p><strong>PostgreSQL Endoint:</strong> ${db_endpoint}</p>
             <p><strong>PostgreSQL Instance:</strong> ${db_name}</p>
-
+            
             <footer>
               <p><strong>Posted by:</strong> Jeffry Milan</p>
               <p><strong>Contact information:</strong> <a href="mailto:jeffry.milan@gmail.com">jtmilan@gmail.com</a>.</p>
             </footer>
             <p><strong>Note:</strong> The environment specified is a naive representation of a web application with a database backend.</p>
             __EOF__
-
+            
             ${user_data}
         EOT
       + vars     = {
@@ -548,7 +598,7 @@ Terraform will perform the following actions:
   + resource "aws_key_pair" "generated" {
       + fingerprint = (known after apply)
       + id          = (known after apply)
-      + key_name    = "iac-dev-iac-cluster"
+      + key_name    = "iac-dev-jeffrymilan"
       + key_pair_id = (known after apply)
       + public_key  = (known after apply)
     }
@@ -557,7 +607,7 @@ Terraform will perform the following actions:
   + resource "local_file" "private_key_pem" {
       + directory_permission = "0777"
       + file_permission      = "0777"
-      + filename             = "./secrets/iac-dev-iac-cluster"
+      + filename             = "./secrets/iac-dev-jeffrymilan"
       + id                   = (known after apply)
       + sensitive_content    = (sensitive value)
     }
@@ -567,7 +617,7 @@ Terraform will perform the following actions:
       + content              = (known after apply)
       + directory_permission = "0777"
       + file_permission      = "0777"
-      + filename             = "./secrets/iac-dev-iac-cluster.pub"
+      + filename             = "./secrets/iac-dev-jeffrymilan.pub"
       + id                   = (known after apply)
     }
 
@@ -740,7 +790,7 @@ Terraform will perform the following actions:
       + image_id                             = "ami-0d1cd67c26f5fca19"
       + instance_initiated_shutdown_behavior = "terminate"
       + instance_type                        = "t2.micro"
-      + key_name                             = "iac-dev-iac-cluster"
+      + key_name                             = "iac-dev-jeffrymilan"
       + latest_version                       = (known after apply)
       + name                                 = (known after apply)
       + name_prefix                          = "iac-dev-ec2-asg-"
@@ -1494,6 +1544,7 @@ Terraform will perform the following actions:
   # module.vpc.aws_default_security_group.default will be created
   + resource "aws_default_security_group" "default" {
       + arn                    = (known after apply)
+      + description            = (known after apply)
       + egress                 = []
       + id                     = (known after apply)
       + ingress                = []
@@ -1556,227 +1607,226 @@ To perform exactly these actions, run the following command to apply:
     terraform apply "./plan/iac-cluster.plan"
 ```
 
+
+
 If everything looks good, from `terraform plan` then apply real changes using `terraform apply`
 
 ### Apply terraform (Create Cluster)
-```yaml
+
+```shell
 $ terraform apply "./plan/iac-cluster.plan"
+```
+
+```yaml
 
 module.aws_key_pair.tls_private_key.default[0]: Creating...
-module.aws_key_pair.tls_private_key.default[0]: Creation complete after 0s [id=cbb38f9c1ee403bf344db9782d898e7736584232]
+module.vpc.aws_vpc.default: Creating...
+module.rds_cluster.aws_db_parameter_group.default[0]: Creating...
+module.subnets.aws_eip.default[0]: Creating...
+module.rds_cluster.aws_rds_cluster_parameter_group.default[0]: Creating...
 module.subnets.aws_eip.default[1]: Creating...
 module.subnets.aws_eip.default[2]: Creating...
-module.rds_cluster.aws_rds_cluster_parameter_group.default[0]: Creating...
-module.subnets.aws_eip.default[0]: Creating...
+module.aws_key_pair.tls_private_key.default[0]: Creation complete after 1s [id=f3b00895dccd7bcb2da1136e224f31df34ab23ea]
+module.aws_key_pair.aws_key_pair.generated[0]: Creating...
 module.aws_key_pair.local_file.public_key_openssh[0]: Creating...
 module.aws_key_pair.local_file.private_key_pem[0]: Creating...
-module.rds_cluster.aws_db_parameter_group.default[0]: Creating...
-module.aws_key_pair.aws_key_pair.generated[0]: Creating...
-module.aws_key_pair.local_file.public_key_openssh[0]: Creation complete after 0s [id=123995bce3cb822a4558445a36fabe719a5b925c]
-module.aws_key_pair.local_file.private_key_pem[0]: Creation complete after 0s [id=122d0f236241c650f3139119b769fba7da9077c8]
-module.vpc.aws_vpc.default: Creating...
+module.aws_key_pair.local_file.private_key_pem[0]: Creation complete after 0s [id=544c52711d8f8531767cb1725a3aed05a5971895]
+module.aws_key_pair.local_file.public_key_openssh[0]: Creation complete after 0s [id=6b0c1f7ca8b3a6f630d1d5668089a743dbec6baa]
 module.aws_key_pair.null_resource.chmod[0]: Creating...
 module.aws_key_pair.null_resource.chmod[0]: Provisioning with 'local-exec'...
-module.aws_key_pair.null_resource.chmod[0] (local-exec): Executing: ["/bin/sh" "-c" "chmod 600 ./secrets/iac-dev-iac-cluster"]
-module.aws_key_pair.null_resource.chmod[0]: Creation complete after 0s [id=1429066280363734842]
-module.aws_key_pair.aws_key_pair.generated[0]: Creation complete after 1s [id=iac-dev-iac-cluster]
-module.subnets.aws_eip.default[1]: Creation complete after 6s [id=eipalloc-0680e6f9bda0a8d19]
-module.rds_cluster.aws_db_parameter_group.default[0]: Still creating... [10s elapsed]
-module.subnets.aws_eip.default[0]: Still creating... [10s elapsed]
-module.rds_cluster.aws_rds_cluster_parameter_group.default[0]: Still creating... [10s elapsed]
-module.subnets.aws_eip.default[2]: Still creating... [10s elapsed]
+module.aws_key_pair.null_resource.chmod[0] (local-exec): Executing: ["/bin/sh" "-c" "chmod 600 ./secrets/iac-dev-jeffrymilan"]
+module.aws_key_pair.null_resource.chmod[0]: Creation complete after 0s [id=3085550157498708206]
+module.aws_key_pair.aws_key_pair.generated[0]: Creation complete after 1s [id=iac-dev-jeffrymilan]
+module.rds_cluster.aws_db_parameter_group.default[0]: Creation complete after 2s [id=iac-dev-rds]
+module.rds_cluster.aws_rds_cluster_parameter_group.default[0]: Creation complete after 2s [id=iac-dev-rds]
+module.subnets.aws_eip.default[1]: Creation complete after 6s [id=eipalloc-03e6311d27c5b4dae]
+module.subnets.aws_eip.default[0]: Creation complete after 6s [id=eipalloc-067f0b7de2f879541]
+module.subnets.aws_eip.default[2]: Creation complete after 6s [id=eipalloc-06f2200121b103a02]
 module.vpc.aws_vpc.default: Still creating... [10s elapsed]
-module.subnets.aws_eip.default[0]: Creation complete after 11s [id=eipalloc-0e9053c5f86b33c8d]
-module.subnets.aws_eip.default[2]: Creation complete after 12s [id=eipalloc-0521d881079390336]
-module.rds_cluster.aws_rds_cluster_parameter_group.default[0]: Creation complete after 17s [id=iac-dev-rds]
-module.rds_cluster.aws_db_parameter_group.default[0]: Creation complete after 17s [id=iac-dev-rds]
-module.vpc.aws_vpc.default: Creation complete after 19s [id=vpc-08d226f74ecf87bde]
+module.vpc.aws_vpc.default: Still creating... [20s elapsed]
+module.vpc.aws_vpc.default: Creation complete after 24s [id=vpc-0c6f75b8f8c13b0eb]
 module.subnets.data.aws_vpc.default: Refreshing state...
 module.vpc.aws_internet_gateway.default: Creating...
 module.vpc.aws_default_security_group.default: Creating...
 aws_security_group.iac-dev-rds-sg: Creating...
 aws_security_group.iac-dev-ec2-sg: Creating...
 module.subnets.aws_route_table.public[0]: Creating...
-module.subnets.aws_route_table.private[2]: Creating...
 module.subnets.aws_route_table.private[0]: Creating...
-module.subnets.aws_subnet.public[1]: Creating...
-module.subnets.aws_subnet.private[0]: Creating...
 module.subnets.aws_subnet.private[1]: Creating...
-aws_security_group.iac-dev-ec2-sg: Still creating... [10s elapsed]
-module.vpc.aws_default_security_group.default: Still creating... [10s elapsed]
-aws_security_group.iac-dev-rds-sg: Still creating... [10s elapsed]
-module.vpc.aws_internet_gateway.default: Still creating... [10s elapsed]
-module.vpc.aws_default_security_group.default: Creation complete after 12s [id=sg-0f265aa1b3d151ab5]
+module.subnets.aws_subnet.private[0]: Creating...
+module.subnets.aws_subnet.public[0]: Creating...
+module.subnets.aws_subnet.public[1]: Creating...
+module.vpc.aws_internet_gateway.default: Creation complete after 2s [id=igw-0c20e97746b2a2a38]
 module.subnets.aws_subnet.public[2]: Creating...
-aws_security_group.iac-dev-ec2-sg: Creation complete after 12s [id=sg-0011d0ea96268d7e4]
+aws_security_group.iac-dev-rds-sg: Creation complete after 8s [id=sg-0ff0d95cfba912a9e]
+module.subnets.aws_route_table.private[2]: Creating...
+module.vpc.aws_default_security_group.default: Creation complete after 8s [id=sg-019f87e6c9e9a80d3]
+module.subnets.aws_route_table.private[1]: Creating...
+aws_security_group.iac-dev-ec2-sg: Creation complete after 8s [id=sg-05364938edbe679bd]
 module.subnets.aws_subnet.private[2]: Creating...
+module.subnets.aws_route_table.public[0]: Still creating... [10s elapsed]
+module.subnets.aws_route_table.private[0]: Still creating... [10s elapsed]
 module.subnets.aws_subnet.private[0]: Still creating... [10s elapsed]
 module.subnets.aws_subnet.private[1]: Still creating... [10s elapsed]
 module.subnets.aws_subnet.public[1]: Still creating... [10s elapsed]
-module.subnets.aws_route_table.public[0]: Still creating... [10s elapsed]
+module.subnets.aws_subnet.public[0]: Still creating... [10s elapsed]
+module.subnets.aws_subnet.public[2]: Still creating... [10s elapsed]
 module.subnets.aws_route_table.private[2]: Still creating... [10s elapsed]
-module.subnets.aws_route_table.private[0]: Still creating... [10s elapsed]
-module.subnets.aws_subnet.private[1]: Creation complete after 11s [id=subnet-0700366c1904a23fa]
-module.subnets.aws_route_table.private[1]: Creating...
-module.subnets.aws_subnet.private[0]: Creation complete after 11s [id=subnet-095de7b7bd92cc361]
-module.subnets.aws_subnet.public[0]: Creating...
-module.subnets.aws_route_table.private[2]: Creation complete after 11s [id=rtb-06bb7abf998a322f6]
-aws_security_group_rule.ingress[2]: Creating...
-module.subnets.aws_route_table.private[0]: Creation complete after 11s [id=rtb-0d2be95f008699d01]
-aws_security_group.iac-dev-rds-sg: Creation complete after 17s [id=sg-0815015a00ae40db6]
+module.subnets.aws_route_table.private[1]: Still creating... [10s elapsed]
+module.subnets.aws_subnet.private[2]: Still creating... [10s elapsed]
+module.subnets.aws_route_table.private[0]: Creation complete after 16s [id=rtb-0851888dfceaf31a3]
+aws_security_group_rule.rds_egress[0]: Creating...
+module.subnets.aws_route_table.public[0]: Creation complete after 16s [id=rtb-0eaa1ac7f98415dcf]
+aws_security_group_rule.rds_ingress[0]: Creating...
+module.subnets.aws_subnet.private[0]: Creation complete after 17s [id=subnet-002fba6327d1e8821]
+aws_security_group_rule.rds_ingress_dynamic[0]: Creating...
+module.subnets.aws_subnet.public[0]: Creation complete after 17s [id=subnet-03deee7ea2ff44cfd]
+aws_security_group_rule.rds_ingress[1]: Creating...
+module.subnets.aws_subnet.private[1]: Creation complete after 17s [id=subnet-0524d9e94e3425908]
+aws_security_group_rule.ingress[1]: Creating...
+module.subnets.aws_subnet.public[1]: Creation complete after 17s [id=subnet-09c5835db8671bea2]
+aws_security_group_rule.ingress[0]: Creating...
+module.subnets.aws_subnet.public[2]: Still creating... [20s elapsed]
+module.subnets.aws_route_table.private[1]: Creation complete after 16s [id=rtb-0155cade9eae25508]
+module.subnets.aws_subnet.private[2]: Creation complete after 16s [id=subnet-0a22ce8ac1f8b676c]
+module.subnets.aws_subnet.public[2]: Creation complete after 22s [id=subnet-03476f668d19d9826]
 aws_security_group_rule.egress[0]: Creating...
 aws_security_group_rule.ingress[3]: Creating...
-module.vpc.aws_internet_gateway.default: Creation complete after 17s [id=igw-013830692a5db59ff]
-aws_security_group_rule.ingress[0]: Creating...
-module.subnets.aws_route_table.public[0]: Creation complete after 12s [id=rtb-01d9e1c667bc4d5b3]
-aws_security_group_rule.ingress[1]: Creating...
-module.subnets.aws_subnet.public[1]: Creation complete after 12s [id=subnet-0edd8546b7d4fdd40]
-aws_security_group_rule.rds_ingress_dynamic[0]: Creating...
-module.subnets.aws_subnet.public[2]: Still creating... [10s elapsed]
-module.subnets.aws_subnet.private[2]: Still creating... [10s elapsed]
-module.subnets.aws_route_table.private[1]: Still creating... [10s elapsed]
-module.subnets.aws_subnet.public[0]: Still creating... [10s elapsed]
-aws_security_group_rule.ingress[2]: Still creating... [10s elapsed]
-aws_security_group_rule.egress[0]: Still creating... [10s elapsed]
-aws_security_group_rule.ingress[3]: Still creating... [10s elapsed]
-aws_security_group_rule.ingress[0]: Still creating... [10s elapsed]
-aws_security_group_rule.ingress[1]: Still creating... [10s elapsed]
-aws_security_group_rule.rds_ingress_dynamic[0]: Still creating... [10s elapsed]
-aws_security_group_rule.ingress[2]: Creation complete after 11s [id=sgrule-3221212493]
-aws_security_group_rule.rds_ingress[0]: Creating...
-module.subnets.aws_subnet.public[2]: Creation complete after 16s [id=subnet-0f939733caf1f2460]
-aws_security_group_rule.rds_egress[0]: Creating...
-module.subnets.aws_subnet.private[2]: Creation complete after 16s [id=subnet-019a4ee2c860b8c5f]
-aws_security_group_rule.rds_ingress[1]: Creating...
-module.subnets.aws_subnet.public[0]: Creation complete after 16s [id=subnet-0645634732d740546]
-module.subnets.aws_route_table.private[1]: Creation complete after 16s [id=rtb-04f89428e67b0ee3b]
-module.subnets.aws_network_acl.private[0]: Creating...
-module.rds_cluster.aws_security_group.default[0]: Creating...
-aws_security_group_rule.rds_ingress_dynamic[0]: Creation complete after 15s [id=sgrule-3010855469]
-module.subnets.aws_route_table_association.public[2]: Creating...
-aws_security_group_rule.egress[0]: Creation complete after 17s [id=sgrule-2232867475]
-module.subnets.aws_nat_gateway.default[1]: Creating...
-aws_security_group_rule.ingress[3]: Still creating... [20s elapsed]
-aws_security_group_rule.ingress[0]: Still creating... [20s elapsed]
-aws_security_group_rule.ingress[1]: Still creating... [20s elapsed]
-aws_security_group_rule.rds_ingress[0]: Still creating... [10s elapsed]
+aws_security_group_rule.ingress[2]: Creating...
+module.subnets.aws_route_table.private[2]: Still creating... [20s elapsed]
 aws_security_group_rule.rds_egress[0]: Still creating... [10s elapsed]
+aws_security_group_rule.rds_ingress[0]: Still creating... [10s elapsed]
+aws_security_group_rule.rds_ingress_dynamic[0]: Still creating... [10s elapsed]
 aws_security_group_rule.rds_ingress[1]: Still creating... [10s elapsed]
-module.subnets.aws_route_table_association.public[2]: Creation complete after 6s [id=rtbassoc-0acac9831f27aed56]
-module.subnets.aws_route_table_association.public[1]: Creating...
-module.subnets.aws_network_acl.private[0]: Still creating... [10s elapsed]
-module.rds_cluster.aws_security_group.default[0]: Still creating... [10s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [10s elapsed]
-aws_security_group_rule.ingress[3]: Creation complete after 27s [id=sgrule-544208436]
-module.subnets.aws_nat_gateway.default[0]: Creating...
-module.subnets.aws_route_table_association.public[1]: Creation complete after 5s [id=rtbassoc-066b0e4ea65dbb9df]
-module.subnets.aws_route_table_association.public[0]: Creating...
-aws_security_group_rule.rds_ingress[0]: Creation complete after 16s [id=sgrule-1961041413]
-module.subnets.aws_network_acl.public[0]: Creating...
-module.subnets.aws_route_table_association.public[0]: Creation complete after 1s [id=rtbassoc-046453d42d4188e95]
+aws_security_group_rule.ingress[1]: Still creating... [10s elapsed]
+aws_security_group_rule.ingress[0]: Still creating... [10s elapsed]
+module.subnets.aws_route_table.private[2]: Creation complete after 21s [id=rtb-09d0eec274af9083e]
+aws_security_group_rule.rds_egress[0]: Creation complete after 11s [id=sgrule-3947895574]
+module.rds_cluster.aws_security_group.default[0]: Creating...
+module.subnets.aws_network_acl.private[0]: Creating...
+aws_security_group_rule.ingress[1]: Creation complete after 10s [id=sgrule-1897119104]
 module.subnets.aws_nat_gateway.default[2]: Creating...
-aws_security_group_rule.ingress[0]: Still creating... [30s elapsed]
-aws_security_group_rule.ingress[1]: Still creating... [30s elapsed]
-aws_security_group_rule.rds_egress[0]: Still creating... [20s elapsed]
+aws_security_group_rule.ingress[3]: Still creating... [10s elapsed]
+aws_security_group_rule.egress[0]: Still creating... [10s elapsed]
+aws_security_group_rule.ingress[2]: Still creating... [10s elapsed]
+aws_security_group_rule.rds_ingress[0]: Creation complete after 17s [id=sgrule-548998108]
+module.subnets.aws_network_acl.public[0]: Creating...
+aws_security_group_rule.rds_ingress_dynamic[0]: Still creating... [20s elapsed]
 aws_security_group_rule.rds_ingress[1]: Still creating... [20s elapsed]
-aws_security_group_rule.rds_egress[0]: Creation complete after 22s [id=sgrule-1043594018]
-module.subnets.aws_route_table_association.private[0]: Creating...
-aws_security_group_rule.ingress[0]: Creation complete after 33s [id=sgrule-1333537011]
-module.subnets.aws_route_table_association.private[2]: Creating...
-module.subnets.aws_route_table_association.private[0]: Creation complete after 0s [id=rtbassoc-067ff17bad4cead21]
-module.subnets.aws_route_table_association.private[1]: Creating...
-module.subnets.aws_route_table_association.private[2]: Creation complete after 0s [id=rtbassoc-020b10e712ad25ebb]
-aws_elb.iac-dev-asg-elb: Creating...
-module.rds_cluster.aws_security_group.default[0]: Still creating... [20s elapsed]
-module.subnets.aws_network_acl.private[0]: Still creating... [20s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [20s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [10s elapsed]
-module.subnets.aws_network_acl.public[0]: Still creating... [10s elapsed]
+aws_security_group_rule.ingress[0]: Still creating... [20s elapsed]
+module.rds_cluster.aws_security_group.default[0]: Still creating... [10s elapsed]
+module.subnets.aws_network_acl.private[0]: Still creating... [10s elapsed]
 module.subnets.aws_nat_gateway.default[2]: Still creating... [10s elapsed]
-module.subnets.aws_route_table_association.private[1]: Creation complete after 6s [id=rtbassoc-0b2b386e35e65dd27]
+aws_security_group_rule.ingress[0]: Creation complete after 21s [id=sgrule-3348750389]
+module.subnets.aws_nat_gateway.default[1]: Creating...
+aws_security_group_rule.rds_ingress_dynamic[0]: Creation complete after 22s [id=sgrule-2116318304]
+module.subnets.aws_nat_gateway.default[0]: Creating...
+aws_security_group_rule.ingress[2]: Still creating... [20s elapsed]
+aws_security_group_rule.egress[0]: Still creating... [20s elapsed]
+aws_security_group_rule.ingress[3]: Still creating... [20s elapsed]
+module.subnets.aws_network_acl.public[0]: Still creating... [10s elapsed]
+aws_security_group_rule.egress[0]: Creation complete after 22s [id=sgrule-2886035955]
+module.subnets.aws_route_table_association.public[1]: Creating...
+module.subnets.aws_route_table_association.public[1]: Creation complete after 0s [id=rtbassoc-05b85f1003d49d3d6]
+module.subnets.aws_route_table_association.public[2]: Creating...
+aws_security_group_rule.rds_ingress[1]: Creation complete after 28s [id=sgrule-3854357414]
+module.subnets.aws_route_table_association.public[0]: Creating...
+module.rds_cluster.aws_security_group.default[0]: Creation complete after 18s [id=sg-000a5c6f5374cdd58]
+module.subnets.aws_route_table_association.private[1]: Creating...
+module.subnets.aws_route_table_association.public[0]: Creation complete after 0s [id=rtbassoc-0529e096ca1be10b7]
+module.subnets.aws_route_table_association.private[0]: Creating...
+module.subnets.aws_route_table_association.public[2]: Creation complete after 1s [id=rtbassoc-02fbf7cdef6bf06e0]
+module.subnets.aws_route_table_association.private[2]: Creating...
+module.subnets.aws_route_table_association.private[1]: Creation complete after 0s [id=rtbassoc-06a3765e7ae063f7d]
 module.subnets.aws_route.public[0]: Creating...
-module.rds_cluster.aws_security_group.default[0]: Creation complete after 23s [id=sg-00b98ce94f831fa4b]
+module.subnets.aws_route_table_association.private[0]: Creation complete after 0s [id=rtbassoc-073833bca32caff70]
+aws_elb.iac-dev-asg-elb: Creating...
+module.subnets.aws_route_table_association.private[2]: Creation complete after 0s [id=rtbassoc-0a6e6ef8cd1fdb5d7]
 module.rds_cluster.aws_db_subnet_group.default[0]: Creating...
-aws_elb.iac-dev-asg-elb: Creation complete after 6s [id=iac-dev-asg-elb]
-aws_security_group_rule.ingress[1]: Creation complete after 38s [id=sgrule-4193678662]
-aws_security_group_rule.rds_ingress[1]: Creation complete after 28s [id=sgrule-2984691327]
-module.subnets.aws_route.public[0]: Creation complete after 0s [id=r-rtb-01d9e1c667bc4d5b31080289494]
-module.subnets.aws_network_acl.private[0]: Creation complete after 24s [id=acl-0c0fbb4f6948e007f]
-module.rds_cluster.aws_db_subnet_group.default[0]: Creation complete after 1s [id=iac-dev-rds]
+module.rds_cluster.aws_db_subnet_group.default[0]: Creation complete after 2s [id=iac-dev-rds]
 module.rds_cluster.aws_rds_cluster.default[0]: Creating...
-module.subnets.aws_network_acl.public[0]: Creation complete after 19s [id=acl-0b55b97baf7dc529e]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [30s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [20s elapsed]
+module.subnets.aws_network_acl.private[0]: Still creating... [20s elapsed]
 module.subnets.aws_nat_gateway.default[2]: Still creating... [20s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [10s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [10s elapsed]
+aws_security_group_rule.ingress[3]: Creation complete after 29s [id=sgrule-678446235]
+module.subnets.aws_route.public[0]: Creation complete after 6s [id=r-rtb-0eaa1ac7f98415dcf1080289494]
+module.subnets.aws_network_acl.private[0]: Creation complete after 24s [id=acl-05a86dc3d01942cf3]
+module.subnets.aws_network_acl.public[0]: Creation complete after 18s [id=acl-09a01f4830a601545]
+aws_security_group_rule.ingress[2]: Still creating... [30s elapsed]
+aws_elb.iac-dev-asg-elb: Still creating... [10s elapsed]
+aws_security_group_rule.ingress[2]: Creation complete after 35s [id=sgrule-3004151764]
 module.rds_cluster.aws_rds_cluster.default[0]: Still creating... [10s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [40s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [30s elapsed]
 module.subnets.aws_nat_gateway.default[2]: Still creating... [30s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [20s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [20s elapsed]
+aws_elb.iac-dev-asg-elb: Creation complete after 15s [id=iac-dev-asg-elb]
 module.rds_cluster.aws_rds_cluster.default[0]: Still creating... [20s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [50s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [40s elapsed]
 module.subnets.aws_nat_gateway.default[2]: Still creating... [40s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [30s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [30s elapsed]
 module.rds_cluster.aws_rds_cluster.default[0]: Still creating... [30s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [1m0s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [50s elapsed]
 module.subnets.aws_nat_gateway.default[2]: Still creating... [50s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [40s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [40s elapsed]
 module.rds_cluster.aws_rds_cluster.default[0]: Still creating... [40s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [1m10s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [1m0s elapsed]
 module.subnets.aws_nat_gateway.default[2]: Still creating... [1m0s elapsed]
-module.rds_cluster.aws_rds_cluster.default[0]: Still creating... [50s elapsed]
-module.rds_cluster.aws_rds_cluster.default[0]: Creation complete after 53s [id=iac-dev-rds]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [50s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [50s elapsed]
+module.rds_cluster.aws_rds_cluster.default[0]: Creation complete after 42s [id=iac-dev-rds]
 data.template_file.user_data: Refreshing state...
 data.template_file.rds: Refreshing state...
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Creating...
 module.iac-dev-ecp.aws_launch_template.default[0]: Creating...
-module.subnets.aws_nat_gateway.default[1]: Still creating... [1m20s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [1m10s elapsed]
-module.subnets.aws_nat_gateway.default[2]: Still creating... [1m10s elapsed]
-module.iac-dev-ecp.aws_launch_template.default[0]: Creation complete after 6s [id=lt-0d2cbcb24c185bc4f]
+module.iac-dev-ecp.aws_launch_template.default[0]: Creation complete after 0s [id=lt-072bcbab9328c99b0]
 module.iac-dev-ecp.aws_autoscaling_group.default[0]: Creating...
+module.subnets.aws_nat_gateway.default[2]: Still creating... [1m10s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [1m0s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [1m0s elapsed]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [10s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [1m30s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [1m20s elapsed]
-module.subnets.aws_nat_gateway.default[2]: Still creating... [1m20s elapsed]
 module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still creating... [10s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Still creating... [1m20s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [1m10s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [1m10s elapsed]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [20s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Still creating... [1m40s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [1m30s elapsed]
-module.subnets.aws_nat_gateway.default[2]: Still creating... [1m30s elapsed]
 module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still creating... [20s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Still creating... [1m30s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [1m20s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [1m20s elapsed]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [30s elapsed]
-module.subnets.aws_nat_gateway.default[1]: Creation complete after 1m48s [id=nat-09204f68b5c35e0e4]
-module.subnets.aws_nat_gateway.default[0]: Still creating... [1m40s elapsed]
-module.subnets.aws_nat_gateway.default[2]: Still creating... [1m40s elapsed]
 module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still creating... [30s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Still creating... [1m40s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [1m30s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [1m30s elapsed]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [40s elapsed]
-module.subnets.aws_nat_gateway.default[0]: Creation complete after 1m49s [id=nat-0e1e552489ef6544e]
-module.subnets.aws_nat_gateway.default[2]: Still creating... [1m50s elapsed]
 module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still creating... [40s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Creation complete after 43s [id=iac-dev-ec2-asg-20200210205918307100000003]
+module.iac-dev-ecp.aws_autoscaling_policy.scale_up[0]: Creating...
+module.iac-dev-ecp.aws_autoscaling_policy.scale_down[0]: Creating...
+module.subnets.aws_nat_gateway.default[2]: Still creating... [1m50s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [1m40s elapsed]
+module.iac-dev-ecp.aws_autoscaling_policy.scale_up[0]: Creation complete after 6s [id=iac-dev-ec2-asg-scale-up]
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_high[0]: Creating...
+module.iac-dev-ecp.aws_autoscaling_policy.scale_down[0]: Creation complete after 6s [id=iac-dev-ec2-asg-scale-down]
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_low[0]: Creating...
+module.subnets.aws_nat_gateway.default[0]: Still creating... [1m40s elapsed]
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_high[0]: Creation complete after 0s [id=iac-dev-ec2-asg-cpu-utilization-high]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [50s elapsed]
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_low[0]: Creation complete after 6s [id=iac-dev-ec2-asg-cpu-utilization-low]
 module.subnets.aws_nat_gateway.default[2]: Still creating... [2m0s elapsed]
-module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still creating... [50s elapsed]
-module.subnets.aws_nat_gateway.default[2]: Creation complete after 2m3s [id=nat-08e54929b93cd2d6f]
+module.subnets.aws_nat_gateway.default[1]: Still creating... [1m50s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still creating... [1m50s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [1m0s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Creation complete after 2m5s [id=nat-0851123fd501220f6]
+module.subnets.aws_nat_gateway.default[1]: Creation complete after 2m0s [id=nat-03b4c0955b5ccefe2]
+module.subnets.aws_nat_gateway.default[0]: Creation complete after 1m59s [id=nat-01681f52b1190f8c8]
 module.subnets.aws_route.default[0]: Creating...
 module.subnets.aws_route.default[1]: Creating...
 module.subnets.aws_route.default[2]: Creating...
-module.iac-dev-ecp.aws_autoscaling_group.default[0]: Creation complete after 53s [id=iac-dev-ec2-asg-20200206193555597000000003]
-module.iac-dev-ecp.aws_autoscaling_policy.scale_down[0]: Creating...
-module.iac-dev-ecp.aws_autoscaling_policy.scale_up[0]: Creating...
-module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [1m0s elapsed]
-module.iac-dev-ecp.aws_autoscaling_policy.scale_up[0]: Creation complete after 1s [id=iac-dev-ec2-asg-scale-up]
-module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_high[0]: Creating...
-module.iac-dev-ecp.aws_autoscaling_policy.scale_down[0]: Creation complete after 1s [id=iac-dev-ec2-asg-scale-down]
-module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_low[0]: Creating...
-module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_high[0]: Creation complete after 1s [id=iac-dev-ec2-asg-cpu-utilization-high]
-module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_low[0]: Creation complete after 1s [id=iac-dev-ec2-asg-cpu-utilization-low]
-module.subnets.aws_route.default[1]: Creation complete after 6s [id=r-rtb-04f89428e67b0ee3b1080289494]
-module.subnets.aws_route.default[2]: Still creating... [10s elapsed]
-module.subnets.aws_route.default[0]: Still creating... [10s elapsed]
-module.subnets.aws_route.default[0]: Creation complete after 11s [id=r-rtb-0d2be95f008699d011080289494]
-module.subnets.aws_route.default[2]: Creation complete after 11s [id=r-rtb-06bb7abf998a322f61080289494]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [1m10s elapsed]
+module.subnets.aws_route.default[2]: Creation complete after 6s [id=r-rtb-09d0eec274af9083e1080289494]
+module.subnets.aws_route.default[1]: Creation complete after 6s [id=r-rtb-0155cade9eae255081080289494]
+module.subnets.aws_route.default[0]: Creation complete after 6s [id=r-rtb-0851888dfceaf31a31080289494]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [1m20s elapsed]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [1m30s elapsed]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [1m40s elapsed]
@@ -1807,9 +1857,7 @@ module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [5m40s
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [5m50s elapsed]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [6m0s elapsed]
 module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [6m10s elapsed]
-module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [6m20s elapsed]
-module.rds_cluster.aws_rds_cluster_instance.default[0]: Still creating... [6m30s elapsed]
-module.rds_cluster.aws_rds_cluster_instance.default[0]: Creation complete after 6m33s [id=iac-dev-rds-1]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Creation complete after 6m13s [id=iac-dev-rds-1]
 
 Apply complete! Resources: 60 added, 0 changed, 0 destroyed.
 
@@ -1819,33 +1867,34 @@ infrastructure, so keep it safe. To inspect the complete state
 use the `terraform show` command.
 
 State path: terraform.tfstate
+
 ```
 
 ### Results: 
 ```yaml
-Outputs:
 
-alb_dns_name = iac-dev-asg-elb-1149699757.us-west-2.elb.amazonaws.com
-arn = arn:aws:rds:us-west-2:684231869031:cluster:iac-dev-rds
-autoscaling_group_arn = arn:aws:autoscaling:us-west-2:684231869031:autoScalingGroup:8a5d6fc0-11f0-428f-8ef5-ae000b08871c:autoScalingGroupName/iac-dev-ec2-asg-20200206193555597000000003
+Outputs:
+alb_dns_name = iac-dev-asg-elb-1600553309.us-west-2.elb.amazonaws.com
+arn = arn:aws:rds:us-west-2:662028814455:cluster:iac-dev-rds
+autoscaling_group_arn = arn:aws:autoscaling:us-west-2:662028814455:autoScalingGroup:b201063c-014c-4874-a5af-8eebaf75868f:autoScalingGroupName/iac-dev-ec2-asg-20200210205918307100000003
 autoscaling_group_default_cooldown = 300
 autoscaling_group_desired_capacity = 1
 autoscaling_group_health_check_grace_period = 300
 autoscaling_group_health_check_type = EC2
-autoscaling_group_id = iac-dev-ec2-asg-20200206193555597000000003
+autoscaling_group_id = iac-dev-ec2-asg-20200210205918307100000003
 autoscaling_group_max_size = 2
 autoscaling_group_min_size = 1
-autoscaling_group_name = iac-dev-ec2-asg-20200206193555597000000003
+autoscaling_group_name = iac-dev-ec2-asg-20200210205918307100000003
 cluster_identifier = iac-dev-rds
-cluster_resource_id = cluster-CHEEZR3224JY7QPTYIUNDFBDYA
+cluster_resource_id = cluster-NC4ANVLTJEU4KAZXSOWXOJAFSE
 database_name = iac_db
 dbi_resource_ids = [
-  "db-76TLB4D3QU4IZZTZQ23DORGCP4",
+  "db-XJBERRRZWHPI3ESAC7XG76BQUE",
 ]
-endpoint = iac-dev-rds.cluster-cljs7deqffpe.us-west-2.rds.amazonaws.com
-launch_template_arn = arn:aws:ec2:us-west-2::launch-template/lt-0d2cbcb24c185bc4f
-launch_template_id = lt-0d2cbcb24c185bc4f
-master_host =
+endpoint = iac-dev-rds.cluster-ceiofvzcgozo.us-west-2.rds.amazonaws.com
+launch_template_arn = arn:aws:ec2:us-west-2::launch-template/lt-072bcbab9328c99b0
+launch_template_id = lt-072bcbab9328c99b0
+master_host = 
 master_username = adminrds
 private_subnet_cidrs = [
   "10.0.0.0/19",
@@ -1857,8 +1906,8 @@ public_subnet_cidrs = [
   "10.0.160.0/19",
   "10.0.192.0/19",
 ]
-reader_endpoint = iac-dev-rds.cluster-ro-cljs7deqffpe.us-west-2.rds.amazonaws.com
-replicas_host =
+reader_endpoint = iac-dev-rds.cluster-ro-ceiofvzcgozo.us-west-2.rds.amazonaws.com
+replicas_host = 
 vpc_cidr = 10.0.0.0/16
 ```
 
@@ -1866,7 +1915,7 @@ vpc_cidr = 10.0.0.0/16
 Once `terraform apply` is `successful`, you will see the `elb_dns_name` configured as a part of output. you can hit `elb_dns_name` in your browser and should see the sample response from nginx container deployed or you can access `elb_dns_name` from CLI as well as given below.
 
 ```bash
-while true; do curl -s -o /dev/null -w "%{http_code} => OK\n" iac-dev-asg-elb-1149699757.us-west-2.elb.amazonaws.com; done
+while true; do curl -s -o /dev/null -w "%{http_code} => OK\n" iac-dev-asg-elb-1600553309.us-west-2.elb.amazonaws.com; done
 
 200 => OK
 200 => OK
@@ -1881,210 +1930,1772 @@ while true; do curl -s -o /dev/null -w "%{http_code} => OK\n" iac-dev-asg-elb-11
 
 ### Web App - powered by: Docker with Nginx: 
 
-> http://iac-dev-asg-elb-1149699757.us-west-2.elb.amazonaws.com
+> http://iac-dev-asg-elb-1600553309.us-west-2.elb.amazonaws.com
 
 ![WebApp](https://imgur.com/ZrwaHzO.png)
 
 
-### Terraform State File ( Private API)
+### Terraform State File ( Private API) - (this is for storing state file in S3) - Do not execute (Access Denied)
+
 The state file format is a private API that changes with every release and is meant only for internal use within Terraform. You should never edit the Terraform state files by hand or write code that reads them directly.
 
-```yaml 
-$ terraform init -backend-config=backend.hcl
-
+```yaml
 Initializing modules...
 
 Initializing the backend...
 
-Initializing provider plugins...
+Error: Error loading state:
+    AccessDenied: Access Denied
+        status code: 403, request id: AADE8093192B55BC, host id: 30Sn4g1ljvBiN50bVI5HKaEXkZO+FqE8SZ+YiINTiPXpPqcS1DuWF/ZvLrML4iZ7t7wvGhNmOjA=
 
-Terraform has been successfully initialized!
-
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
-
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your working directory. If you forget, other
-commands will detect it and remind you to do so if necessary.
+Terraform failed to load the default state from the "s3" backend.
+State migration cannot occur unless the state can be loaded. Backend
+modification and state migration has been aborted. The state in both the
+source and the destination remain unmodified. Please resolve the
+above error and try again.
 ```
 
-```yaml
-$ terraform plan -var-file=iac-cluster.tfvars -out=./plan/iac-cluster.plan
-
-Refreshing Terraform state in-memory prior to plan...
-The refreshed state will be used to calculate this plan, but will not be
-persisted to local or remote state storage.
-
-
-An execution plan has been generated and is shown below.
-Resource actions are indicated with the following symbols:
-  + create
-  ~ update in-place
-
-Terraform will perform the following actions:
-
-  # aws_dynamodb_table.iac-cluster-locks will be created
-  + resource "aws_dynamodb_table" "iac-cluster-locks" {
-      + arn              = (known after apply)
-      + billing_mode     = "PAY_PER_REQUEST"
-      + hash_key         = "LockID"
-      + id               = (known after apply)
-      + name             = "iac-cluster-tfstate-locks"
-      + stream_arn       = (known after apply)
-      + stream_label     = (known after apply)
-      + stream_view_type = (known after apply)
-
-      + attribute {
-          + name = "LockID"
-          + type = "S"
-        }
-
-      + point_in_time_recovery {
-          + enabled = (known after apply)
-        }
-
-      + server_side_encryption {
-          + enabled     = (known after apply)
-          + kms_key_arn = (known after apply)
-        }
-    }
-
-  # aws_s3_bucket.iac-cluster-state will be created
-  + resource "aws_s3_bucket" "iac-cluster-state" {
-      + acceleration_status         = (known after apply)
-      + acl                         = "private"
-      + arn                         = (known after apply)
-      + bucket                      = "iac-cluster-tfstate"
-      + bucket_domain_name          = (known after apply)
-      + bucket_regional_domain_name = (known after apply)
-      + force_destroy               = false
-      + hosted_zone_id              = (known after apply)
-      + id                          = (known after apply)
-      + region                      = (known after apply)
-      + request_payer               = (known after apply)
-      + website_domain              = (known after apply)
-      + website_endpoint            = (known after apply)
-
-      + server_side_encryption_configuration {
-          + rule {
-              + apply_server_side_encryption_by_default {
-                  + sse_algorithm = "AES256"
-                }
-            }
-        }
-
-      + versioning {
-          + enabled    = true
-          + mfa_delete = false
-        }
-    }
-
-  # module.iac-dev-ecp.aws_launch_template.default[0] will be updated in-place
-  ~ resource "aws_launch_template" "default" {
-        arn                                  = "arn:aws:ec2:us-west-2::launch-template/lt-0d2cbcb24c185bc4f"
-        default_version                      = 1
-        disable_api_termination              = false
-        ebs_optimized                        = "false"
-        id                                   = "lt-0d2cbcb24c185bc4f"
-        image_id                             = "ami-0d1cd67c26f5fca19"
-        instance_initiated_shutdown_behavior = "terminate"
-        instance_type                        = "t2.micro"
-        key_name                             = "iac-dev-iac-cluster"
-      ~ latest_version                       = 1 -> (known after apply)
-        name                                 = "iac-dev-ec2-asg-20200206193549778400000001"
-        name_prefix                          = "iac-dev-ec2-asg-"
-        security_group_names                 = []
-        tags                                 = {
-            "Name"      = "iac-dev-ec2"
-            "Namespace" = "iac"
-            "Owner"     = "Terraform"
-            "Stage"     = "dev"
-            "Tier"      = "1"
-        }
-        user_data                            = "IyEvdXNyL2Jpbi9lbnYgYmFzaAoKaWYgWyAiJCguIC9ldGMvb3MtcmVsZWFzZTsgZWNobyAkTkFNRSkiID0gIlVidW50dSIgXTsgdGhlbgogIGFwdC1nZXQgdXBkYXRlCiAgYXB0LWdldCAteSBpbnN0YWxsIGZpZ2xldAogIFNTSF9VU0VSPXVidW50dQplbHNlCiAgeXVtIGluc3RhbGwgZXBlbC1yZWxlYXNlIC15CiAgeXVtIGluc3RhbGwgZmlnbGV0IC15CiAgU1NIX1VTRVI9ZWMyLXVzZXIKZmkKIyBHZW5lcmF0ZSBzeXN0ZW0gYmFubmVyCmZpZ2xldCAiV2VsY29tZSB0byBDb250cm9sIFNlcnZlciIgPiAvZXRjL21vdGQKCgojIwojIyBTZXR1cCBTU0ggQ29uZmlnCiMjCmNhdCA8PCJfX0VPRl9fIiA+IC9ob21lL1NTSF9VU0VSLy5zc2gvY29uZmlnCkhvc3QgKgogICAgU3RyaWN0SG9zdEtleUNoZWNraW5nIG5vCl9fRU9GX18KY2htb2QgNjAwIC9ob21lLyRTU0hfVVNFUi8uc3NoL2NvbmZpZwpjaG93biAkU1NIX1VTRVI6JFNTSF9VU0VSIC9ob21lL1NTSF9VU0VSLy5zc2gvY29uZmlnCgojIwojIyBTZXR1cCBIVE1MCiMjCnN1ZG8gbWtkaXIgLXAgL29wdC9pYWMKc3VkbyBjaG93biAtUiBhZG1pbi5hZG1pbiAvb3B0L2lhYwpjYXQgPDwiX19FT0ZfXyIgPiAvb3B0L2lhYy9pbmRleC5odG1sCjxoMT5EYXRhYmFzZSBJbmZvOiA8L2gxPgo8cD48c3Ryb25nPlBvc3RncmVTUUwgRW5kb2ludDo8L3N0cm9uZz4gaWFjLWRldi1yZHMuY2x1c3Rlci1jbGpzN2RlcWZmcGUudXMtd2VzdC0yLnJkcy5hbWF6b25hd3MuY29tPC9wPgo8cD48c3Ryb25nPlBvc3RncmVTUUwgSW5zdGFuY2U6PC9zdHJvbmc+IGlhY19kYjwvcD4KCjxmb290ZXI+CiAgPHA+PHN0cm9uZz5Qb3N0ZWQgYnk6PC9zdHJvbmc+IEplZmZyeSBNaWxhbjwvcD4KICA8cD48c3Ryb25nPkNvbnRhY3QgaW5mb3JtYXRpb246PC9zdHJvbmc+IDxhIGhyZWY9Im1haWx0bzpqZWZmcnkubWlsYW5AZ21haWwuY29tIj5qdG1pbGFuQGdtYWlsLmNvbTwvYT4uPC9wPgo8L2Zvb3Rlcj4KPHA+PHN0cm9uZz5Ob3RlOjwvc3Ryb25nPiBUaGUgZW52aXJvbm1lbnQgc3BlY2lmaWVkIGlzIGEgbmFpdmUgcmVwcmVzZW50YXRpb24gb2YgYSB3ZWIgYXBwbGljYXRpb24gd2l0aCBhIGRhdGFiYXNlIGJhY2tlbmQuPC9wPgpfX0VPRl9fCgojIS9iaW4vYmFzaAphcHQtZ2V0IHVwZGF0ZQphcHQgLXkgaW5zdGFsbCBuZ2lueAphcHQgLXkgaW5zdGFsbCBkb2NrZXIuaW8KdWZ3IGFsbG93ICdOZ2lueCBIVFRQJwpzeXN0ZW1jdGwgc3RhcnQgZG9ja2VyCnN5c3RlbWN0bCBlbmFibGUgZG9ja2VyCmRvY2tlciBydW4gLS1uYW1lIGlhYy1uZ2lueCAtLXJlc3RhcnQ9dW5sZXNzLXN0b3BwZWQgLXYgL29wdC9pYWM6L3Vzci9zaGFyZS9uZ2lueC9odG1sOnJvIC1kIC1wIDgwODA6ODAgbmdpbngKCg=="
-        vpc_security_group_ids               = []
-
-      + iam_instance_profile {}
-
-        monitoring {
-            enabled = true
-        }
-
-        network_interfaces {
-            associate_public_ip_address = "true"
-            delete_on_termination       = true
-            description                 = "iac-dev-ec2-asg"
-            device_index                = 0
-            ipv4_address_count          = 0
-            ipv4_addresses              = []
-            ipv6_address_count          = 0
-            ipv6_addresses              = []
-            security_groups             = [
-                "sg-0011d0ea96268d7e4",
-            ]
-        }
-
-        tag_specifications {
-            resource_type = "volume"
-            tags          = {
-                "Name"      = "iac-dev-ec2"
-                "Namespace" = "iac"
-                "Owner"     = "Terraform"
-                "Stage"     = "dev"
-                "Tier"      = "1"
-            }
-        }
-        tag_specifications {
-            resource_type = "instance"
-            tags          = {
-                "Name"      = "iac-dev-ec2"
-                "Namespace" = "iac"
-                "Owner"     = "Terraform"
-                "Stage"     = "dev"
-                "Tier"      = "1"
-            }
-        }
-    }
-
-Plan: 2 to add, 1 to change, 0 to destroy.
-
-
-
-------------------------------------------------------------------------
-
-This plan was saved to: ./plan/iac-cluster.plan
-
-To perform exactly these actions, run the following command to apply:
-    terraform apply "./plan/iac-cluster.plan"
-```
-```
-$ terraform apply "./plan/iac-cluster.plan"
-aws_dynamodb_table.iac-cluster-locks: Creating...
-aws_s3_bucket.iac-cluster-state: Creating...
-module.iac-dev-ecp.aws_launch_template.default[0]: Modifying... [id=lt-0d2cbcb24c185bc4f]
-module.iac-dev-ecp.aws_launch_template.default[0]: Modifications complete after 7s [id=lt-0d2cbcb24c185bc4f]
-aws_s3_bucket.iac-cluster-state: Still creating... [10s elapsed]
-aws_dynamodb_table.iac-cluster-locks: Still creating... [10s elapsed]
-aws_dynamodb_table.iac-cluster-locks: Still creating... [20s elapsed]
-aws_s3_bucket.iac-cluster-state: Still creating... [20s elapsed]
-aws_dynamodb_table.iac-cluster-locks: Creation complete after 22s [id=iac-cluster-tfstate-locks]
-aws_s3_bucket.iac-cluster-state: Still creating... [30s elapsed]
-aws_s3_bucket.iac-cluster-state: Creation complete after 40s [id=iac-cluster-tfstate]
-
-Apply complete! Resources: 2 added, 1 changed, 0 destroyed.
-```
 
 ### Destroy Infrastructure(clean-up)
-
-This is not yet done.
 
 ```
 $ terraform plan -destroy -var-file=iac-cluster.tfvars -out=./destroy/iac-cluster.destroy
 ```
 
+```yaml
+Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+
+module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
+module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[4]: Refreshing state...
+module.subnets.module.public_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
+module.subnets.module.nat_instance_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[4]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
+module.subnets.module.private_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.aws_key_pair.tls_private_key.default[0]: Refreshing state... [id=1af8cdb01a0d33950630bf133e6aff7628283d38]
+module.subnets.module.nat_label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
+module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
+module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[2]: Refreshing state...
+module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[1]: Refreshing state...
+module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.subnets.module.label.data.null_data_source.tags_as_list_of_maps[0]: Refreshing state...
+module.vpc.module.label.data.null_data_source.tags_as_list_of_maps[3]: Refreshing state...
+module.aws_key_pair.local_file.public_key_openssh[0]: Refreshing state... [id=76b45103a42dfd5ea48cf78e43c571ba3835662d]
+module.aws_key_pair.local_file.private_key_pem[0]: Refreshing state... [id=3aafbae020fc12f3acbdfce253f61a716013ed4c]
+module.aws_key_pair.null_resource.chmod[0]: Refreshing state... [id=9145674845761086373]
+module.subnets.aws_eip.default[1]: Refreshing state... [id=eipalloc-0ea37feffa5670376]
+module.subnets.aws_eip.default[0]: Refreshing state... [id=eipalloc-0ee98473a1c471528]
+module.subnets.aws_eip.default[2]: Refreshing state... [id=eipalloc-0c9ebae8a02b3add0]
+module.vpc.aws_vpc.default: Refreshing state... [id=vpc-06930f221f81bb801]
+module.aws_key_pair.aws_key_pair.generated[0]: Refreshing state... [id=iac-dev-jeffrymilan]
+module.subnets.data.aws_availability_zones.available: Refreshing state...
+module.rds_cluster.aws_db_parameter_group.default[0]: Refreshing state... [id=iac-dev-rds]
+module.rds_cluster.aws_rds_cluster_parameter_group.default[0]: Refreshing state... [id=iac-dev-rds]
+module.vpc.aws_default_security_group.default: Refreshing state... [id=sg-031783e2203d3d78f]
+module.vpc.aws_internet_gateway.default: Refreshing state... [id=igw-055161e27697962d5]
+module.subnets.data.aws_vpc.default: Refreshing state...
+aws_security_group.iac-dev-rds-sg: Refreshing state... [id=sg-091cd0f41fce76446]
+aws_security_group.iac-dev-ec2-sg: Refreshing state... [id=sg-0f202a554030214fb]
+aws_security_group_rule.egress[0]: Refreshing state... [id=sgrule-1417906670]
+aws_security_group_rule.ingress[1]: Refreshing state... [id=sgrule-631296820]
+aws_security_group_rule.ingress[2]: Refreshing state... [id=sgrule-3233341605]
+aws_security_group_rule.ingress[0]: Refreshing state... [id=sgrule-2469039745]
+aws_security_group_rule.ingress[3]: Refreshing state... [id=sgrule-47396811]
+aws_security_group_rule.rds_ingress_dynamic[0]: Refreshing state... [id=sgrule-214679645]
+aws_security_group_rule.rds_egress[0]: Refreshing state... [id=sgrule-3431259760]
+aws_security_group_rule.rds_ingress[1]: Refreshing state... [id=sgrule-1111972389]
+aws_security_group_rule.rds_ingress[0]: Refreshing state... [id=sgrule-2269282911]
+module.rds_cluster.aws_security_group.default[0]: Refreshing state... [id=sg-0a5f58ec1536230f7]
+module.subnets.aws_subnet.private[0]: Refreshing state... [id=subnet-06460b59759808ae6]
+module.subnets.aws_subnet.private[1]: Refreshing state... [id=subnet-01f68a89a048e7ca7]
+module.subnets.aws_subnet.private[2]: Refreshing state... [id=subnet-091cb53cde2f5a18b]
+module.subnets.aws_route_table.private[0]: Refreshing state... [id=rtb-0412971a9a2b0af17]
+module.subnets.aws_route_table.private[1]: Refreshing state... [id=rtb-0514727ce29bf5a41]
+module.subnets.aws_subnet.public[1]: Refreshing state... [id=subnet-023871b75b6bbbb8d]
+module.subnets.aws_subnet.public[0]: Refreshing state... [id=subnet-09e4e142936b2d83a]
+module.subnets.aws_route_table.private[2]: Refreshing state... [id=rtb-0626bed0831231706]
+module.subnets.aws_subnet.public[2]: Refreshing state... [id=subnet-01ba667d8ecf13479]
+module.subnets.aws_route_table.public[0]: Refreshing state... [id=rtb-025bbe4df51dea065]
+module.subnets.aws_route.public[0]: Refreshing state... [id=r-rtb-025bbe4df51dea0651080289494]
+module.subnets.aws_nat_gateway.default[2]: Refreshing state... [id=nat-06ba0fed9a127dbc1]
+module.subnets.aws_network_acl.public[0]: Refreshing state... [id=acl-098887751d5dd5b90]
+module.subnets.aws_nat_gateway.default[1]: Refreshing state... [id=nat-0622789960bb7daa0]
+module.subnets.aws_nat_gateway.default[0]: Refreshing state... [id=nat-0893089d49c77ee11]
+module.subnets.aws_route_table_association.public[0]: Refreshing state... [id=rtbassoc-0b9bc963f27a64293]
+module.subnets.aws_route_table_association.public[1]: Refreshing state... [id=rtbassoc-0dca805f0d16a0148]
+module.subnets.aws_route_table_association.public[2]: Refreshing state... [id=rtbassoc-0a6dfb6e2a6e399ec]
+aws_elb.iac-dev-asg-elb: Refreshing state... [id=iac-dev-asg-elb]
+module.subnets.aws_network_acl.private[0]: Refreshing state... [id=acl-0037a6c512b9ea029]
+module.subnets.aws_route_table_association.private[2]: Refreshing state... [id=rtbassoc-0bd3af89d44c3ab6e]
+module.subnets.aws_route_table_association.private[0]: Refreshing state... [id=rtbassoc-0b2140ea42b1b8b3c]
+module.subnets.aws_route_table_association.private[1]: Refreshing state... [id=rtbassoc-09b1c565668e1380e]
+module.rds_cluster.aws_db_subnet_group.default[0]: Refreshing state... [id=iac-dev-rds]
+module.subnets.aws_route.default[0]: Refreshing state... [id=r-rtb-0412971a9a2b0af171080289494]
+module.subnets.aws_route.default[1]: Refreshing state... [id=r-rtb-0514727ce29bf5a411080289494]
+module.subnets.aws_route.default[2]: Refreshing state... [id=r-rtb-0626bed08312317061080289494]
+module.rds_cluster.aws_rds_cluster.default[0]: Refreshing state... [id=iac-dev-rds]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Refreshing state... [id=iac-dev-rds-1]
+data.template_file.rds: Refreshing state...
+data.template_file.user_data: Refreshing state...
+module.iac-dev-ecp.aws_launch_template.default[0]: Refreshing state... [id=lt-0a2928df81bb94676]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Refreshing state... [id=iac-dev-ec2-asg-20200210203901665700000003]
+module.iac-dev-ecp.aws_autoscaling_policy.scale_down[0]: Refreshing state... [id=iac-dev-ec2-asg-scale-down]
+module.iac-dev-ecp.aws_autoscaling_policy.scale_up[0]: Refreshing state... [id=iac-dev-ec2-asg-scale-up]
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_high[0]: Refreshing state... [id=iac-dev-ec2-asg-cpu-utilization-high]
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_low[0]: Refreshing state... [id=iac-dev-ec2-asg-cpu-utilization-low]
+
+------------------------------------------------------------------------
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_elb.iac-dev-asg-elb will be destroyed
+  - resource "aws_elb" "iac-dev-asg-elb" {
+      - arn                         = "arn:aws:elasticloadbalancing:us-west-2::loadbalancer/iac-dev-asg-elb" -> null
+      - availability_zones          = [
+          - "us-west-2a",
+          - "us-west-2b",
+          - "us-west-2c",
+        ] -> null
+      - connection_draining         = true -> null
+      - connection_draining_timeout = 400 -> null
+      - cross_zone_load_balancing   = true -> null
+      - dns_name                    = "iac-dev-asg-elb-1403180753.us-west-2.elb.amazonaws.com" -> null
+      - id                          = "iac-dev-asg-elb" -> null
+      - idle_timeout                = 400 -> null
+      - instances                   = [
+          - "i-0b8f060622d2257e7",
+        ] -> null
+      - internal                    = false -> null
+      - name                        = "iac-dev-asg-elb" -> null
+      - security_groups             = [
+          - "sg-0f202a554030214fb",
+        ] -> null
+      - source_security_group       = "662028814455/iac-dev-ec2-sg" -> null
+      - source_security_group_id    = "sg-0f202a554030214fb" -> null
+      - subnets                     = [
+          - "subnet-01ba667d8ecf13479",
+          - "subnet-023871b75b6bbbb8d",
+          - "subnet-09e4e142936b2d83a",
+        ] -> null
+      - tags                        = {} -> null
+      - zone_id                     = "Z1H1FL5HABSF5" -> null
+
+      - health_check {
+          - healthy_threshold   = 10 -> null
+          - interval            = 30 -> null
+          - target              = "TCP:8080" -> null
+          - timeout             = 5 -> null
+          - unhealthy_threshold = 2 -> null
+        }
+
+      - listener {
+          - instance_port     = 8080 -> null
+          - instance_protocol = "tcp" -> null
+          - lb_port           = 80 -> null
+          - lb_protocol       = "tcp" -> null
+        }
+    }
+
+  # aws_security_group.iac-dev-ec2-sg will be destroyed
+  - resource "aws_security_group" "iac-dev-ec2-sg" {
+      - arn                    = "arn:aws:ec2:us-west-2:662028814455:security-group/sg-0f202a554030214fb" -> null
+      - description            = "security group for ec2 instance" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+            },
+        ] -> null
+      - id                     = "sg-0f202a554030214fb" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 22
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 22
+            },
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 443
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 443
+            },
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 8080
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 8080
+            },
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+            },
+        ] -> null
+      - name                   = "iac-dev-ec2-sg" -> null
+      - owner_id               = "662028814455" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name"  = "iac-dev-ec2-sg"
+          - "Owner" = "Terraform"
+        } -> null
+      - vpc_id                 = "vpc-06930f221f81bb801" -> null
+    }
+
+  # aws_security_group.iac-dev-rds-sg will be destroyed
+  - resource "aws_security_group" "iac-dev-rds-sg" {
+      - arn                    = "arn:aws:ec2:us-west-2:662028814455:security-group/sg-091cd0f41fce76446" -> null
+      - description            = "security group for rds instances" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+            },
+        ] -> null
+      - id                     = "sg-091cd0f41fce76446" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 65535
+            },
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 5432
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 5432
+            },
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 8080
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 8080
+            },
+        ] -> null
+      - name                   = "iac-dev-rds-sg" -> null
+      - owner_id               = "662028814455" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name"  = "iac-dev-rds-sg"
+          - "Owner" = "Terraform"
+        } -> null
+      - vpc_id                 = "vpc-06930f221f81bb801" -> null
+    }
+
+  # aws_security_group_rule.egress[0] will be destroyed
+  - resource "aws_security_group_rule" "egress" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 0 -> null
+      - id                = "sgrule-1417906670" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "-1" -> null
+      - security_group_id = "sg-0f202a554030214fb" -> null
+      - self              = false -> null
+      - to_port           = 0 -> null
+      - type              = "egress" -> null
+    }
+
+  # aws_security_group_rule.ingress[0] will be destroyed
+  - resource "aws_security_group_rule" "ingress" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 22 -> null
+      - id                = "sgrule-2469039745" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "tcp" -> null
+      - security_group_id = "sg-0f202a554030214fb" -> null
+      - self              = false -> null
+      - to_port           = 22 -> null
+      - type              = "ingress" -> null
+    }
+
+  # aws_security_group_rule.ingress[1] will be destroyed
+  - resource "aws_security_group_rule" "ingress" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 80 -> null
+      - id                = "sgrule-631296820" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "tcp" -> null
+      - security_group_id = "sg-0f202a554030214fb" -> null
+      - self              = false -> null
+      - to_port           = 80 -> null
+      - type              = "ingress" -> null
+    }
+
+  # aws_security_group_rule.ingress[2] will be destroyed
+  - resource "aws_security_group_rule" "ingress" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 8080 -> null
+      - id                = "sgrule-3233341605" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "tcp" -> null
+      - security_group_id = "sg-0f202a554030214fb" -> null
+      - self              = false -> null
+      - to_port           = 8080 -> null
+      - type              = "ingress" -> null
+    }
+
+  # aws_security_group_rule.ingress[3] will be destroyed
+  - resource "aws_security_group_rule" "ingress" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 443 -> null
+      - id                = "sgrule-47396811" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "tcp" -> null
+      - security_group_id = "sg-0f202a554030214fb" -> null
+      - self              = false -> null
+      - to_port           = 443 -> null
+      - type              = "ingress" -> null
+    }
+
+  # aws_security_group_rule.rds_egress[0] will be destroyed
+  - resource "aws_security_group_rule" "rds_egress" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 0 -> null
+      - id                = "sgrule-3431259760" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "-1" -> null
+      - security_group_id = "sg-091cd0f41fce76446" -> null
+      - self              = false -> null
+      - to_port           = 0 -> null
+      - type              = "egress" -> null
+    }
+
+  # aws_security_group_rule.rds_ingress[0] will be destroyed
+  - resource "aws_security_group_rule" "rds_ingress" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 8080 -> null
+      - id                = "sgrule-2269282911" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "tcp" -> null
+      - security_group_id = "sg-091cd0f41fce76446" -> null
+      - self              = false -> null
+      - to_port           = 8080 -> null
+      - type              = "ingress" -> null
+    }
+
+  # aws_security_group_rule.rds_ingress[1] will be destroyed
+  - resource "aws_security_group_rule" "rds_ingress" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 5432 -> null
+      - id                = "sgrule-1111972389" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "tcp" -> null
+      - security_group_id = "sg-091cd0f41fce76446" -> null
+      - self              = false -> null
+      - to_port           = 5432 -> null
+      - type              = "ingress" -> null
+    }
+
+  # aws_security_group_rule.rds_ingress_dynamic[0] will be destroyed
+  - resource "aws_security_group_rule" "rds_ingress_dynamic" {
+      - cidr_blocks       = [
+          - "0.0.0.0/0",
+        ] -> null
+      - from_port         = 0 -> null
+      - id                = "sgrule-214679645" -> null
+      - ipv6_cidr_blocks  = [] -> null
+      - prefix_list_ids   = [] -> null
+      - protocol          = "tcp" -> null
+      - security_group_id = "sg-091cd0f41fce76446" -> null
+      - self              = false -> null
+      - to_port           = 65535 -> null
+      - type              = "ingress" -> null
+    }
+
+  # module.aws_key_pair.aws_key_pair.generated[0] will be destroyed
+  - resource "aws_key_pair" "generated" {
+      - fingerprint = "1e:a8:f3:70:42:ee:60:40:8c:a3:91:b6:d1:aa:a6:cb" -> null
+      - id          = "iac-dev-jeffrymilan" -> null
+      - key_name    = "iac-dev-jeffrymilan" -> null
+      - key_pair_id = "key-05189f29d1719793a" -> null
+      - public_key  = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCq8OEWGWSVmtxC1FMADyHJFf+peYtxH3ZS/AqgOavVIWkV/aO1Y8eiPtY9HRAwZ6yqEg3eVhq7oGgrzBY0eD56bxMjmsy8eK8P4tCHhMR4073/73YFNiTSh/TW/lM1dUdwdxzE3cBpMy3xbhnG4qhjP7j6TmuYkDptd2zX6TydWC7hX3cowPRBGDeLrLmSn5Oukn2im3NtZJIuMIo/F4G+Ef1NmLaGUA4wXHbxiTvhRJOlI+7T8HEeFCIeOEramrN3bmRwojx3LBxQrUsAuh80UpszgduTRrf3x7NOcj/L+dFNiYi7xUEeD3B6dgyONZ1c0+R2LM7hy+7DunoKItbd" -> null
+      - tags        = {} -> null
+    }
+
+  # module.aws_key_pair.local_file.private_key_pem[0] will be destroyed
+  - resource "local_file" "private_key_pem" {
+      - directory_permission = "0777" -> null
+      - file_permission      = "0777" -> null
+      - filename             = "./secrets/iac-dev-jeffrymilan" -> null
+      - id                   = "3aafbae020fc12f3acbdfce253f61a716013ed4c" -> null
+      - sensitive_content    = (sensitive value)
+    }
+
+  # module.aws_key_pair.local_file.public_key_openssh[0] will be destroyed
+  - resource "local_file" "public_key_openssh" {
+      - content              = <<~EOT
+            ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCq8OEWGWSVmtxC1FMADyHJFf+peYtxH3ZS/AqgOavVIWkV/aO1Y8eiPtY9HRAwZ6yqEg3eVhq7oGgrzBY0eD56bxMjmsy8eK8P4tCHhMR4073/73YFNiTSh/TW/lM1dUdwdxzE3cBpMy3xbhnG4qhjP7j6TmuYkDptd2zX6TydWC7hX3cowPRBGDeLrLmSn5Oukn2im3NtZJIuMIo/F4G+Ef1NmLaGUA4wXHbxiTvhRJOlI+7T8HEeFCIeOEramrN3bmRwojx3LBxQrUsAuh80UpszgduTRrf3x7NOcj/L+dFNiYi7xUEeD3B6dgyONZ1c0+R2LM7hy+7DunoKItbd
+        EOT -> null
+      - directory_permission = "0777" -> null
+      - file_permission      = "0777" -> null
+      - filename             = "./secrets/iac-dev-jeffrymilan.pub" -> null
+      - id                   = "76b45103a42dfd5ea48cf78e43c571ba3835662d" -> null
+    }
+
+  # module.aws_key_pair.null_resource.chmod[0] will be destroyed
+  - resource "null_resource" "chmod" {
+      - id       = "9145674845761086373" -> null
+      - triggers = {
+          - "local_file_private_key_pem" = "local_file.private_key_pem"
+        } -> null
+    }
+
+  # module.aws_key_pair.tls_private_key.default[0] will be destroyed
+  - resource "tls_private_key" "default" {
+      - algorithm                  = "RSA" -> null
+      - ecdsa_curve                = "P224" -> null
+      - id                         = "1af8cdb01a0d33950630bf133e6aff7628283d38" -> null
+      - private_key_pem            = (sensitive value)
+      - public_key_fingerprint_md5 = "96:8e:5d:13:a2:77:29:66:f0:5f:2a:83:06:a5:f0:e6" -> null
+      - public_key_openssh         = <<~EOT
+            ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCq8OEWGWSVmtxC1FMADyHJFf+peYtxH3ZS/AqgOavVIWkV/aO1Y8eiPtY9HRAwZ6yqEg3eVhq7oGgrzBY0eD56bxMjmsy8eK8P4tCHhMR4073/73YFNiTSh/TW/lM1dUdwdxzE3cBpMy3xbhnG4qhjP7j6TmuYkDptd2zX6TydWC7hX3cowPRBGDeLrLmSn5Oukn2im3NtZJIuMIo/F4G+Ef1NmLaGUA4wXHbxiTvhRJOlI+7T8HEeFCIeOEramrN3bmRwojx3LBxQrUsAuh80UpszgduTRrf3x7NOcj/L+dFNiYi7xUEeD3B6dgyONZ1c0+R2LM7hy+7DunoKItbd
+        EOT -> null
+      - public_key_pem             = <<~EOT
+            -----BEGIN PUBLIC KEY-----
+            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqvDhFhlklZrcQtRTAA8h
+            yRX/qXmLcR92UvwKoDmr1SFpFf2jtWPHoj7WPR0QMGesqhIN3lYau6BoK8wWNHg+
+            em8TI5rMvHivD+LQh4TEeNO9/+92BTYk0of01v5TNXVHcHccxN3AaTMt8W4ZxuKo
+            Yz+4+k5rmJA6bXds1+k8nVgu4V93KMD0QRg3i6y5kp+TrpJ9optzbWSSLjCKPxeB
+            vhH9TZi2hlAOMFx28Yk74USTpSPu0/BxHhQiHjhK2pqzd25kcKI8dywcUK1LALof
+            NFKbM4Hbk0a398ezTnI/y/nRTYmIu8VBHg9wenYMjjWdXNPkdizO4cvuw7p6CiLW
+            3QIDAQAB
+            -----END PUBLIC KEY-----
+        EOT -> null
+      - rsa_bits                   = 2048 -> null
+    }
+
+  # module.iac-dev-ecp.aws_autoscaling_group.default[0] will be destroyed
+  - resource "aws_autoscaling_group" "default" {
+      - arn                       = "arn:aws:autoscaling:us-west-2:662028814455:autoScalingGroup:e029a98d-1ca4-4ec9-b4e2-ba119b0aedc4:autoScalingGroupName/iac-dev-ec2-asg-20200210203901665700000003" -> null
+      - availability_zones        = [
+          - "us-west-2a",
+          - "us-west-2b",
+          - "us-west-2c",
+        ] -> null
+      - default_cooldown          = 300 -> null
+      - desired_capacity          = 1 -> null
+      - enabled_metrics           = [
+          - "GroupDesiredCapacity",
+          - "GroupInServiceInstances",
+          - "GroupMaxSize",
+          - "GroupMinSize",
+          - "GroupPendingInstances",
+          - "GroupStandbyInstances",
+          - "GroupTerminatingInstances",
+          - "GroupTotalInstances",
+        ] -> null
+      - force_delete              = false -> null
+      - health_check_grace_period = 300 -> null
+      - health_check_type         = "EC2" -> null
+      - id                        = "iac-dev-ec2-asg-20200210203901665700000003" -> null
+      - load_balancers            = [
+          - "iac-dev-asg-elb",
+        ] -> null
+      - max_instance_lifetime     = 0 -> null
+      - max_size                  = 2 -> null
+      - metrics_granularity       = "1Minute" -> null
+      - min_elb_capacity          = 0 -> null
+      - min_size                  = 1 -> null
+      - name                      = "iac-dev-ec2-asg-20200210203901665700000003" -> null
+      - name_prefix               = "iac-dev-ec2-asg-" -> null
+      - protect_from_scale_in     = false -> null
+      - service_linked_role_arn   = "arn:aws:iam::662028814455:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling" -> null
+      - suspended_processes       = [] -> null
+      - tags                      = [
+          - {
+              - "key"                 = "Name"
+              - "propagate_at_launch" = "true"
+              - "value"               = "iac-dev-ec2"
+            },
+          - {
+              - "key"                 = "Namespace"
+              - "propagate_at_launch" = "true"
+              - "value"               = "iac"
+            },
+          - {
+              - "key"                 = "Owner"
+              - "propagate_at_launch" = "true"
+              - "value"               = "Terraform"
+            },
+          - {
+              - "key"                 = "Stage"
+              - "propagate_at_launch" = "true"
+              - "value"               = "dev"
+            },
+          - {
+              - "key"                 = "Tier"
+              - "propagate_at_launch" = "true"
+              - "value"               = "1"
+            },
+        ] -> null
+      - target_group_arns         = [] -> null
+      - termination_policies      = [
+          - "Default",
+        ] -> null
+      - vpc_zone_identifier       = [
+          - "subnet-01f68a89a048e7ca7",
+          - "subnet-06460b59759808ae6",
+          - "subnet-091cb53cde2f5a18b",
+        ] -> null
+      - wait_for_capacity_timeout = "10m" -> null
+      - wait_for_elb_capacity     = 0 -> null
+
+      - launch_template {
+          - id      = "lt-0a2928df81bb94676" -> null
+          - name    = "iac-dev-ec2-asg-20200210203900858100000001" -> null
+          - version = "$Latest" -> null
+        }
+    }
+
+  # module.iac-dev-ecp.aws_autoscaling_policy.scale_down[0] will be destroyed
+  - resource "aws_autoscaling_policy" "scale_down" {
+      - adjustment_type           = "ChangeInCapacity" -> null
+      - arn                       = "arn:aws:autoscaling:us-west-2:662028814455:scalingPolicy:f9da1b42-5b7c-4d19-9792-f9d0f521a578:autoScalingGroupName/iac-dev-ec2-asg-20200210203901665700000003:policyName/iac-dev-ec2-asg-scale-down" -> null
+      - autoscaling_group_name    = "iac-dev-ec2-asg-20200210203901665700000003" -> null
+      - cooldown                  = 300 -> null
+      - estimated_instance_warmup = 0 -> null
+      - id                        = "iac-dev-ec2-asg-scale-down" -> null
+      - name                      = "iac-dev-ec2-asg-scale-down" -> null
+      - policy_type               = "SimpleScaling" -> null
+      - scaling_adjustment        = -1 -> null
+    }
+
+  # module.iac-dev-ecp.aws_autoscaling_policy.scale_up[0] will be destroyed
+  - resource "aws_autoscaling_policy" "scale_up" {
+      - adjustment_type           = "ChangeInCapacity" -> null
+      - arn                       = "arn:aws:autoscaling:us-west-2:662028814455:scalingPolicy:be05bbcb-5d15-4e89-96dc-a83610b792a6:autoScalingGroupName/iac-dev-ec2-asg-20200210203901665700000003:policyName/iac-dev-ec2-asg-scale-up" -> null
+      - autoscaling_group_name    = "iac-dev-ec2-asg-20200210203901665700000003" -> null
+      - cooldown                  = 300 -> null
+      - estimated_instance_warmup = 0 -> null
+      - id                        = "iac-dev-ec2-asg-scale-up" -> null
+      - name                      = "iac-dev-ec2-asg-scale-up" -> null
+      - policy_type               = "SimpleScaling" -> null
+      - scaling_adjustment        = 1 -> null
+    }
+
+  # module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_high[0] will be destroyed
+  - resource "aws_cloudwatch_metric_alarm" "cpu_high" {
+      - actions_enabled           = true -> null
+      - alarm_actions             = [
+          - "arn:aws:autoscaling:us-west-2:662028814455:scalingPolicy:be05bbcb-5d15-4e89-96dc-a83610b792a6:autoScalingGroupName/iac-dev-ec2-asg-20200210203901665700000003:policyName/iac-dev-ec2-asg-scale-up",
+        ] -> null
+      - alarm_description         = "Scale up if CPU utilization is above 80 for 300 seconds" -> null
+      - alarm_name                = "iac-dev-ec2-asg-cpu-utilization-high" -> null
+      - arn                       = "arn:aws:cloudwatch:us-west-2:662028814455:alarm:iac-dev-ec2-asg-cpu-utilization-high" -> null
+      - comparison_operator       = "GreaterThanOrEqualToThreshold" -> null
+      - datapoints_to_alarm       = 0 -> null
+      - dimensions                = {
+          - "AutoScalingGroupName" = "iac-dev-ec2-asg-20200210203901665700000003"
+        } -> null
+      - evaluation_periods        = 2 -> null
+      - id                        = "iac-dev-ec2-asg-cpu-utilization-high" -> null
+      - insufficient_data_actions = [] -> null
+      - metric_name               = "CPUUtilization" -> null
+      - namespace                 = "AWS/EC2" -> null
+      - ok_actions                = [] -> null
+      - period                    = 300 -> null
+      - statistic                 = "Average" -> null
+      - tags                      = {} -> null
+      - threshold                 = 80 -> null
+      - treat_missing_data        = "missing" -> null
+    }
+
+  # module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_low[0] will be destroyed
+  - resource "aws_cloudwatch_metric_alarm" "cpu_low" {
+      - actions_enabled           = true -> null
+      - alarm_actions             = [
+          - "arn:aws:autoscaling:us-west-2:662028814455:scalingPolicy:f9da1b42-5b7c-4d19-9792-f9d0f521a578:autoScalingGroupName/iac-dev-ec2-asg-20200210203901665700000003:policyName/iac-dev-ec2-asg-scale-down",
+        ] -> null
+      - alarm_description         = "Scale down if the CPU utilization is below 20 for 300 seconds" -> null
+      - alarm_name                = "iac-dev-ec2-asg-cpu-utilization-low" -> null
+      - arn                       = "arn:aws:cloudwatch:us-west-2:662028814455:alarm:iac-dev-ec2-asg-cpu-utilization-low" -> null
+      - comparison_operator       = "LessThanOrEqualToThreshold" -> null
+      - datapoints_to_alarm       = 0 -> null
+      - dimensions                = {
+          - "AutoScalingGroupName" = "iac-dev-ec2-asg-20200210203901665700000003"
+        } -> null
+      - evaluation_periods        = 2 -> null
+      - id                        = "iac-dev-ec2-asg-cpu-utilization-low" -> null
+      - insufficient_data_actions = [] -> null
+      - metric_name               = "CPUUtilization" -> null
+      - namespace                 = "AWS/EC2" -> null
+      - ok_actions                = [] -> null
+      - period                    = 300 -> null
+      - statistic                 = "Average" -> null
+      - tags                      = {} -> null
+      - threshold                 = 20 -> null
+      - treat_missing_data        = "missing" -> null
+    }
+
+  # module.iac-dev-ecp.aws_launch_template.default[0] will be destroyed
+  - resource "aws_launch_template" "default" {
+      - arn                                  = "arn:aws:ec2:us-west-2::launch-template/lt-0a2928df81bb94676" -> null
+      - default_version                      = 1 -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = "false" -> null
+      - id                                   = "lt-0a2928df81bb94676" -> null
+      - image_id                             = "ami-0d1cd67c26f5fca19" -> null
+      - instance_initiated_shutdown_behavior = "terminate" -> null
+      - instance_type                        = "t2.micro" -> null
+      - key_name                             = "iac-dev-jeffrymilan" -> null
+      - latest_version                       = 1 -> null
+      - name                                 = "iac-dev-ec2-asg-20200210203900858100000001" -> null
+      - name_prefix                          = "iac-dev-ec2-asg-" -> null
+      - security_group_names                 = [] -> null
+      - tags                                 = {
+          - "Name"      = "iac-dev-ec2"
+          - "Namespace" = "iac"
+          - "Owner"     = "Terraform"
+          - "Stage"     = "dev"
+          - "Tier"      = "1"
+        } -> null
+      - user_data                            = "IyEvdXNyL2Jpbi9lbnYgYmFzaAoKaWYgWyAiJCguIC9ldGMvb3MtcmVsZWFzZTsgZWNobyAkTkFNRSkiID0gIlVidW50dSIgXTsgdGhlbgogIGFwdC1nZXQgdXBkYXRlCiAgYXB0LWdldCAteSBpbnN0YWxsIGZpZ2xldAogIFNTSF9VU0VSPXVidW50dQplbHNlCiAgeXVtIGluc3RhbGwgZXBlbC1yZWxlYXNlIC15CiAgeXVtIGluc3RhbGwgZmlnbGV0IC15CiAgU1NIX1VTRVI9ZWMyLXVzZXIKZmkKIyBHZW5lcmF0ZSBzeXN0ZW0gYmFubmVyCmZpZ2xldCAiV2VsY29tZSB0byBDb250cm9sIFNlcnZlciIgPiAvZXRjL21vdGQKCgojIwojIyBTZXR1cCBTU0ggQ29uZmlnCiMjCmNhdCA8PCJfX0VPRl9fIiA+IC9ob21lL1NTSF9VU0VSLy5zc2gvY29uZmlnCkhvc3QgKgogICAgU3RyaWN0SG9zdEtleUNoZWNraW5nIG5vCl9fRU9GX18KY2htb2QgNjAwIC9ob21lLyRTU0hfVVNFUi8uc3NoL2NvbmZpZwpjaG93biAkU1NIX1VTRVI6JFNTSF9VU0VSIC9ob21lL1NTSF9VU0VSLy5zc2gvY29uZmlnCgojIwojIyBTZXR1cCBIVE1MCiMjCnN1ZG8gbWtkaXIgLXAgL29wdC9pYWMKc3VkbyBjaG93biAtUiBhZG1pbi5hZG1pbiAvb3B0L2lhYwpjYXQgPDwiX19FT0ZfXyIgPiAvb3B0L2lhYy9pbmRleC5odG1sCjxoMT5EYXRhYmFzZSBJbmZvOiA8L2gxPgo8cD48c3Ryb25nPlBvc3RncmVTUUwgRW5kb2ludDo8L3N0cm9uZz4gaWFjLWRldi1yZHMuY2x1c3Rlci1jZWlvZnZ6Y2dvem8udXMtd2VzdC0yLnJkcy5hbWF6b25hd3MuY29tPC9wPgo8cD48c3Ryb25nPlBvc3RncmVTUUwgSW5zdGFuY2U6PC9zdHJvbmc+IGlhY19kYjwvcD4KCjxmb290ZXI+CiAgPHA+PHN0cm9uZz5Qb3N0ZWQgYnk6PC9zdHJvbmc+IEplZmZyeSBNaWxhbjwvcD4KICA8cD48c3Ryb25nPkNvbnRhY3QgaW5mb3JtYXRpb246PC9zdHJvbmc+IDxhIGhyZWY9Im1haWx0bzpqZWZmcnkubWlsYW5AZ21haWwuY29tIj5qdG1pbGFuQGdtYWlsLmNvbTwvYT4uPC9wPgo8L2Zvb3Rlcj4KPHA+PHN0cm9uZz5Ob3RlOjwvc3Ryb25nPiBUaGUgZW52aXJvbm1lbnQgc3BlY2lmaWVkIGlzIGEgbmFpdmUgcmVwcmVzZW50YXRpb24gb2YgYSB3ZWIgYXBwbGljYXRpb24gd2l0aCBhIGRhdGFiYXNlIGJhY2tlbmQuPC9wPgpfX0VPRl9fCgojIS9iaW4vYmFzaAphcHQtZ2V0IHVwZGF0ZQphcHQgLXkgaW5zdGFsbCBuZ2lueAphcHQgLXkgaW5zdGFsbCBkb2NrZXIuaW8KdWZ3IGFsbG93ICdOZ2lueCBIVFRQJwpzeXN0ZW1jdGwgc3RhcnQgZG9ja2VyCnN5c3RlbWN0bCBlbmFibGUgZG9ja2VyCmRvY2tlciBydW4gLS1uYW1lIGlhYy1uZ2lueCAtLXJlc3RhcnQ9dW5sZXNzLXN0b3BwZWQgLXYgL29wdC9pYWM6L3Vzci9zaGFyZS9uZ2lueC9odG1sOnJvIC1kIC1wIDgwODA6ODAgbmdpbngKCg==" -> null
+      - vpc_security_group_ids               = [] -> null
+
+      - monitoring {
+          - enabled = true -> null
+        }
+
+      - network_interfaces {
+          - associate_public_ip_address = "true" -> null
+          - delete_on_termination       = true -> null
+          - description                 = "iac-dev-ec2-asg" -> null
+          - device_index                = 0 -> null
+          - ipv4_address_count          = 0 -> null
+          - ipv4_addresses              = [] -> null
+          - ipv6_address_count          = 0 -> null
+          - ipv6_addresses              = [] -> null
+          - security_groups             = [
+              - "sg-0f202a554030214fb",
+            ] -> null
+        }
+
+      - tag_specifications {
+          - resource_type = "volume" -> null
+          - tags          = {
+              - "Name"      = "iac-dev-ec2"
+              - "Namespace" = "iac"
+              - "Owner"     = "Terraform"
+              - "Stage"     = "dev"
+              - "Tier"      = "1"
+            } -> null
+        }
+      - tag_specifications {
+          - resource_type = "instance" -> null
+          - tags          = {
+              - "Name"      = "iac-dev-ec2"
+              - "Namespace" = "iac"
+              - "Owner"     = "Terraform"
+              - "Stage"     = "dev"
+              - "Tier"      = "1"
+            } -> null
+        }
+    }
+
+  # module.rds_cluster.aws_db_parameter_group.default[0] will be destroyed
+  - resource "aws_db_parameter_group" "default" {
+      - arn         = "arn:aws:rds:us-west-2:662028814455:pg:iac-dev-rds" -> null
+      - description = "DB instance parameter group" -> null
+      - family      = "aurora-postgresql10" -> null
+      - id          = "iac-dev-rds" -> null
+      - name        = "iac-dev-rds" -> null
+      - tags        = {
+          - "Name"      = "iac-dev-rds"
+          - "Namespace" = "iac"
+          - "Stage"     = "dev"
+        } -> null
+    }
+
+  # module.rds_cluster.aws_db_subnet_group.default[0] will be destroyed
+  - resource "aws_db_subnet_group" "default" {
+      - arn         = "arn:aws:rds:us-west-2:662028814455:subgrp:iac-dev-rds" -> null
+      - description = "Allowed subnets for DB cluster instances" -> null
+      - id          = "iac-dev-rds" -> null
+      - name        = "iac-dev-rds" -> null
+      - subnet_ids  = [
+          - "subnet-01f68a89a048e7ca7",
+          - "subnet-06460b59759808ae6",
+          - "subnet-091cb53cde2f5a18b",
+        ] -> null
+      - tags        = {
+          - "Name"      = "iac-dev-rds"
+          - "Namespace" = "iac"
+          - "Stage"     = "dev"
+        } -> null
+    }
+
+  # module.rds_cluster.aws_rds_cluster.default[0] will be destroyed
+  - resource "aws_rds_cluster" "default" {
+      - apply_immediately                   = true -> null
+      - arn                                 = "arn:aws:rds:us-west-2:662028814455:cluster:iac-dev-rds" -> null
+      - availability_zones                  = [
+          - "us-west-2a",
+          - "us-west-2b",
+          - "us-west-2c",
+        ] -> null
+      - backtrack_window                    = 0 -> null
+      - backup_retention_period             = 5 -> null
+      - cluster_identifier                  = "iac-dev-rds" -> null
+      - cluster_members                     = [
+          - "iac-dev-rds-1",
+        ] -> null
+      - cluster_resource_id                 = "cluster-7NOHF6EQAQ7IOA6WAQKJ7KA2AM" -> null
+      - copy_tags_to_snapshot               = false -> null
+      - database_name                       = "iac_db" -> null
+      - db_cluster_parameter_group_name     = "iac-dev-rds" -> null
+      - db_subnet_group_name                = "iac-dev-rds" -> null
+      - deletion_protection                 = false -> null
+      - enable_http_endpoint                = false -> null
+      - enabled_cloudwatch_logs_exports     = [] -> null
+      - endpoint                            = "iac-dev-rds.cluster-ceiofvzcgozo.us-west-2.rds.amazonaws.com" -> null
+      - engine                              = "aurora-postgresql" -> null
+      - engine_mode                         = "provisioned" -> null
+      - engine_version                      = "10.7" -> null
+      - final_snapshot_identifier           = "iac-dev-rds" -> null
+      - hosted_zone_id                      = "Z1PVIF0B656C1W" -> null
+      - iam_database_authentication_enabled = false -> null
+      - iam_roles                           = [] -> null
+      - id                                  = "iac-dev-rds" -> null
+      - master_password                     = (sensitive value)
+      - master_username                     = "adminrds" -> null
+      - port                                = 5432 -> null
+      - preferred_backup_window             = "07:00-09:00" -> null
+      - preferred_maintenance_window        = "wed:03:00-wed:04:00" -> null
+      - reader_endpoint                     = "iac-dev-rds.cluster-ro-ceiofvzcgozo.us-west-2.rds.amazonaws.com" -> null
+      - skip_final_snapshot                 = true -> null
+      - storage_encrypted                   = false -> null
+      - tags                                = {
+          - "Name"      = "iac-dev-rds"
+          - "Namespace" = "iac"
+          - "Stage"     = "dev"
+        } -> null
+      - vpc_security_group_ids              = [
+          - "sg-0a5f58ec1536230f7",
+        ] -> null
+    }
+
+  # module.rds_cluster.aws_rds_cluster_instance.default[0] will be destroyed
+  - resource "aws_rds_cluster_instance" "default" {
+      - arn                          = "arn:aws:rds:us-west-2:662028814455:db:iac-dev-rds-1" -> null
+      - auto_minor_version_upgrade   = true -> null
+      - availability_zone            = "us-west-2a" -> null
+      - ca_cert_identifier           = "rds-ca-2019" -> null
+      - cluster_identifier           = "iac-dev-rds" -> null
+      - copy_tags_to_snapshot        = false -> null
+      - db_parameter_group_name      = "iac-dev-rds" -> null
+      - db_subnet_group_name         = "iac-dev-rds" -> null
+      - dbi_resource_id              = "db-ENQKWTV7O2IVTQUWZCYS7OLHHE" -> null
+      - endpoint                     = "iac-dev-rds-1.ceiofvzcgozo.us-west-2.rds.amazonaws.com" -> null
+      - engine                       = "aurora-postgresql" -> null
+      - engine_version               = "10.7" -> null
+      - id                           = "iac-dev-rds-1" -> null
+      - identifier                   = "iac-dev-rds-1" -> null
+      - instance_class               = "db.r4.large" -> null
+      - monitoring_interval          = 0 -> null
+      - performance_insights_enabled = false -> null
+      - port                         = 5432 -> null
+      - preferred_backup_window      = "07:00-09:00" -> null
+      - preferred_maintenance_window = "sun:11:52-sun:12:22" -> null
+      - promotion_tier               = 0 -> null
+      - publicly_accessible          = false -> null
+      - storage_encrypted            = false -> null
+      - tags                         = {
+          - "Name"      = "iac-dev-rds"
+          - "Namespace" = "iac"
+          - "Stage"     = "dev"
+        } -> null
+      - writer                       = true -> null
+    }
+
+  # module.rds_cluster.aws_rds_cluster_parameter_group.default[0] will be destroyed
+  - resource "aws_rds_cluster_parameter_group" "default" {
+      - arn         = "arn:aws:rds:us-west-2:662028814455:cluster-pg:iac-dev-rds" -> null
+      - description = "DB cluster parameter group" -> null
+      - family      = "aurora-postgresql10" -> null
+      - id          = "iac-dev-rds" -> null
+      - name        = "iac-dev-rds" -> null
+      - tags        = {
+          - "Name"      = "iac-dev-rds"
+          - "Namespace" = "iac"
+          - "Stage"     = "dev"
+        } -> null
+    }
+
+  # module.rds_cluster.aws_security_group.default[0] will be destroyed
+  - resource "aws_security_group" "default" {
+      - arn                    = "arn:aws:ec2:us-west-2:662028814455:security-group/sg-0a5f58ec1536230f7" -> null
+      - description            = "Allow inbound traffic from Security Groups and CIDRs" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+            },
+        ] -> null
+      - id                     = "sg-0a5f58ec1536230f7" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = []
+              - description      = ""
+              - from_port        = 3306
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = [
+                  - "sg-091cd0f41fce76446",
+                ]
+              - self             = false
+              - to_port          = 3306
+            },
+          - {
+              - cidr_blocks      = []
+              - description      = ""
+              - from_port        = 3306
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 3306
+            },
+        ] -> null
+      - name                   = "iac-dev-rds" -> null
+      - owner_id               = "662028814455" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name"      = "iac-dev-rds"
+          - "Namespace" = "iac"
+          - "Stage"     = "dev"
+        } -> null
+      - vpc_id                 = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_eip.default[0] will be destroyed
+  - resource "aws_eip" "default" {
+      - association_id    = "eipassoc-0949e2684ec14424e" -> null
+      - domain            = "vpc" -> null
+      - id                = "eipalloc-0ee98473a1c471528" -> null
+      - network_interface = "eni-04fbe758a7183edca" -> null
+      - private_dns       = "ip-10-0-141-119.us-west-2.compute.internal" -> null
+      - private_ip        = "10.0.141.119" -> null
+      - public_dns        = "ec2-54-218-220-65.us-west-2.compute.amazonaws.com" -> null
+      - public_ip         = "54.218.220.65" -> null
+      - public_ipv4_pool  = "amazon" -> null
+      - tags              = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2a"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc               = true -> null
+    }
+
+  # module.subnets.aws_eip.default[1] will be destroyed
+  - resource "aws_eip" "default" {
+      - association_id    = "eipassoc-03ae6e76705d51cb3" -> null
+      - domain            = "vpc" -> null
+      - id                = "eipalloc-0ea37feffa5670376" -> null
+      - network_interface = "eni-0c7251d7911f149f7" -> null
+      - private_dns       = "ip-10-0-175-152.us-west-2.compute.internal" -> null
+      - private_ip        = "10.0.175.152" -> null
+      - public_dns        = "ec2-44-233-5-36.us-west-2.compute.amazonaws.com" -> null
+      - public_ip         = "44.233.5.36" -> null
+      - public_ipv4_pool  = "amazon" -> null
+      - tags              = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2b"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc               = true -> null
+    }
+
+  # module.subnets.aws_eip.default[2] will be destroyed
+  - resource "aws_eip" "default" {
+      - association_id    = "eipassoc-0e8dc8e951e455ed7" -> null
+      - domain            = "vpc" -> null
+      - id                = "eipalloc-0c9ebae8a02b3add0" -> null
+      - network_interface = "eni-05c041168248dc0de" -> null
+      - private_dns       = "ip-10-0-206-43.us-west-2.compute.internal" -> null
+      - private_ip        = "10.0.206.43" -> null
+      - public_dns        = "ec2-44-233-131-226.us-west-2.compute.amazonaws.com" -> null
+      - public_ip         = "44.233.131.226" -> null
+      - public_ipv4_pool  = "amazon" -> null
+      - tags              = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2c"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc               = true -> null
+    }
+
+  # module.subnets.aws_nat_gateway.default[0] will be destroyed
+  - resource "aws_nat_gateway" "default" {
+      - allocation_id        = "eipalloc-0ee98473a1c471528" -> null
+      - id                   = "nat-0893089d49c77ee11" -> null
+      - network_interface_id = "eni-04fbe758a7183edca" -> null
+      - private_ip           = "10.0.141.119" -> null
+      - public_ip            = "54.218.220.65" -> null
+      - subnet_id            = "subnet-09e4e142936b2d83a" -> null
+      - tags                 = {
+          - "Attributes" = "nat"
+          - "Name"       = "iac-dev-ecp-nat-us-west-2a"
+          - "Namespace"  = "iac"
+          - "Stage"      = "dev"
+        } -> null
+    }
+
+  # module.subnets.aws_nat_gateway.default[1] will be destroyed
+  - resource "aws_nat_gateway" "default" {
+      - allocation_id        = "eipalloc-0ea37feffa5670376" -> null
+      - id                   = "nat-0622789960bb7daa0" -> null
+      - network_interface_id = "eni-0c7251d7911f149f7" -> null
+      - private_ip           = "10.0.175.152" -> null
+      - public_ip            = "44.233.5.36" -> null
+      - subnet_id            = "subnet-023871b75b6bbbb8d" -> null
+      - tags                 = {
+          - "Attributes" = "nat"
+          - "Name"       = "iac-dev-ecp-nat-us-west-2b"
+          - "Namespace"  = "iac"
+          - "Stage"      = "dev"
+        } -> null
+    }
+
+  # module.subnets.aws_nat_gateway.default[2] will be destroyed
+  - resource "aws_nat_gateway" "default" {
+      - allocation_id        = "eipalloc-0c9ebae8a02b3add0" -> null
+      - id                   = "nat-06ba0fed9a127dbc1" -> null
+      - network_interface_id = "eni-05c041168248dc0de" -> null
+      - private_ip           = "10.0.206.43" -> null
+      - public_ip            = "44.233.131.226" -> null
+      - subnet_id            = "subnet-01ba667d8ecf13479" -> null
+      - tags                 = {
+          - "Attributes" = "nat"
+          - "Name"       = "iac-dev-ecp-nat-us-west-2c"
+          - "Namespace"  = "iac"
+          - "Stage"      = "dev"
+        } -> null
+    }
+
+  # module.subnets.aws_network_acl.private[0] will be destroyed
+  - resource "aws_network_acl" "private" {
+      - egress     = [
+          - {
+              - action          = "allow"
+              - cidr_block      = "0.0.0.0/0"
+              - from_port       = 0
+              - icmp_code       = 0
+              - icmp_type       = 0
+              - ipv6_cidr_block = ""
+              - protocol        = "-1"
+              - rule_no         = 100
+              - to_port         = 0
+            },
+        ] -> null
+      - id         = "acl-0037a6c512b9ea029" -> null
+      - ingress    = [
+          - {
+              - action          = "allow"
+              - cidr_block      = "0.0.0.0/0"
+              - from_port       = 0
+              - icmp_code       = 0
+              - icmp_type       = 0
+              - ipv6_cidr_block = ""
+              - protocol        = "-1"
+              - rule_no         = 100
+              - to_port         = 0
+            },
+        ] -> null
+      - owner_id   = "662028814455" -> null
+      - subnet_ids = [
+          - "subnet-01f68a89a048e7ca7",
+          - "subnet-06460b59759808ae6",
+          - "subnet-091cb53cde2f5a18b",
+        ] -> null
+      - tags       = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-subnet"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc_id     = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_network_acl.public[0] will be destroyed
+  - resource "aws_network_acl" "public" {
+      - egress     = [
+          - {
+              - action          = "allow"
+              - cidr_block      = "0.0.0.0/0"
+              - from_port       = 0
+              - icmp_code       = 0
+              - icmp_type       = 0
+              - ipv6_cidr_block = ""
+              - protocol        = "-1"
+              - rule_no         = 100
+              - to_port         = 0
+            },
+        ] -> null
+      - id         = "acl-098887751d5dd5b90" -> null
+      - ingress    = [
+          - {
+              - action          = "allow"
+              - cidr_block      = "0.0.0.0/0"
+              - from_port       = 0
+              - icmp_code       = 0
+              - icmp_type       = 0
+              - ipv6_cidr_block = ""
+              - protocol        = "-1"
+              - rule_no         = 100
+              - to_port         = 0
+            },
+        ] -> null
+      - owner_id   = "662028814455" -> null
+      - subnet_ids = [
+          - "subnet-01ba667d8ecf13479",
+          - "subnet-023871b75b6bbbb8d",
+          - "subnet-09e4e142936b2d83a",
+        ] -> null
+      - tags       = {
+          - "Attributes"          = "public"
+          - "Name"                = "iac-dev-subnet"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "public"
+        } -> null
+      - vpc_id     = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_route.default[0] will be destroyed
+  - resource "aws_route" "default" {
+      - destination_cidr_block = "0.0.0.0/0" -> null
+      - id                     = "r-rtb-0412971a9a2b0af171080289494" -> null
+      - nat_gateway_id         = "nat-0893089d49c77ee11" -> null
+      - origin                 = "CreateRoute" -> null
+      - route_table_id         = "rtb-0412971a9a2b0af17" -> null
+      - state                  = "active" -> null
+    }
+
+  # module.subnets.aws_route.default[1] will be destroyed
+  - resource "aws_route" "default" {
+      - destination_cidr_block = "0.0.0.0/0" -> null
+      - id                     = "r-rtb-0514727ce29bf5a411080289494" -> null
+      - nat_gateway_id         = "nat-0622789960bb7daa0" -> null
+      - origin                 = "CreateRoute" -> null
+      - route_table_id         = "rtb-0514727ce29bf5a41" -> null
+      - state                  = "active" -> null
+    }
+
+  # module.subnets.aws_route.default[2] will be destroyed
+  - resource "aws_route" "default" {
+      - destination_cidr_block = "0.0.0.0/0" -> null
+      - id                     = "r-rtb-0626bed08312317061080289494" -> null
+      - nat_gateway_id         = "nat-06ba0fed9a127dbc1" -> null
+      - origin                 = "CreateRoute" -> null
+      - route_table_id         = "rtb-0626bed0831231706" -> null
+      - state                  = "active" -> null
+    }
+
+  # module.subnets.aws_route.public[0] will be destroyed
+  - resource "aws_route" "public" {
+      - destination_cidr_block = "0.0.0.0/0" -> null
+      - gateway_id             = "igw-055161e27697962d5" -> null
+      - id                     = "r-rtb-025bbe4df51dea0651080289494" -> null
+      - origin                 = "CreateRoute" -> null
+      - route_table_id         = "rtb-025bbe4df51dea065" -> null
+      - state                  = "active" -> null
+    }
+
+  # module.subnets.aws_route_table.private[0] will be destroyed
+  - resource "aws_route_table" "private" {
+      - id               = "rtb-0412971a9a2b0af17" -> null
+      - owner_id         = "662028814455" -> null
+      - propagating_vgws = [] -> null
+      - route            = [
+          - {
+              - cidr_block                = "0.0.0.0/0"
+              - egress_only_gateway_id    = ""
+              - gateway_id                = ""
+              - instance_id               = ""
+              - ipv6_cidr_block           = ""
+              - nat_gateway_id            = "nat-0893089d49c77ee11"
+              - network_interface_id      = ""
+              - transit_gateway_id        = ""
+              - vpc_peering_connection_id = ""
+            },
+        ] -> null
+      - tags             = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2a"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc_id           = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_route_table.private[1] will be destroyed
+  - resource "aws_route_table" "private" {
+      - id               = "rtb-0514727ce29bf5a41" -> null
+      - owner_id         = "662028814455" -> null
+      - propagating_vgws = [] -> null
+      - route            = [
+          - {
+              - cidr_block                = "0.0.0.0/0"
+              - egress_only_gateway_id    = ""
+              - gateway_id                = ""
+              - instance_id               = ""
+              - ipv6_cidr_block           = ""
+              - nat_gateway_id            = "nat-0622789960bb7daa0"
+              - network_interface_id      = ""
+              - transit_gateway_id        = ""
+              - vpc_peering_connection_id = ""
+            },
+        ] -> null
+      - tags             = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2b"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc_id           = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_route_table.private[2] will be destroyed
+  - resource "aws_route_table" "private" {
+      - id               = "rtb-0626bed0831231706" -> null
+      - owner_id         = "662028814455" -> null
+      - propagating_vgws = [] -> null
+      - route            = [
+          - {
+              - cidr_block                = "0.0.0.0/0"
+              - egress_only_gateway_id    = ""
+              - gateway_id                = ""
+              - instance_id               = ""
+              - ipv6_cidr_block           = ""
+              - nat_gateway_id            = "nat-06ba0fed9a127dbc1"
+              - network_interface_id      = ""
+              - transit_gateway_id        = ""
+              - vpc_peering_connection_id = ""
+            },
+        ] -> null
+      - tags             = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2c"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc_id           = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_route_table.public[0] will be destroyed
+  - resource "aws_route_table" "public" {
+      - id               = "rtb-025bbe4df51dea065" -> null
+      - owner_id         = "662028814455" -> null
+      - propagating_vgws = [] -> null
+      - route            = [
+          - {
+              - cidr_block                = "0.0.0.0/0"
+              - egress_only_gateway_id    = ""
+              - gateway_id                = "igw-055161e27697962d5"
+              - instance_id               = ""
+              - ipv6_cidr_block           = ""
+              - nat_gateway_id            = ""
+              - network_interface_id      = ""
+              - transit_gateway_id        = ""
+              - vpc_peering_connection_id = ""
+            },
+        ] -> null
+      - tags             = {
+          - "Attributes"          = "public"
+          - "Name"                = "iac-dev-subnet"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "public"
+        } -> null
+      - vpc_id           = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_route_table_association.private[0] will be destroyed
+  - resource "aws_route_table_association" "private" {
+      - id             = "rtbassoc-0b2140ea42b1b8b3c" -> null
+      - route_table_id = "rtb-0412971a9a2b0af17" -> null
+      - subnet_id      = "subnet-06460b59759808ae6" -> null
+    }
+
+  # module.subnets.aws_route_table_association.private[1] will be destroyed
+  - resource "aws_route_table_association" "private" {
+      - id             = "rtbassoc-09b1c565668e1380e" -> null
+      - route_table_id = "rtb-0514727ce29bf5a41" -> null
+      - subnet_id      = "subnet-01f68a89a048e7ca7" -> null
+    }
+
+  # module.subnets.aws_route_table_association.private[2] will be destroyed
+  - resource "aws_route_table_association" "private" {
+      - id             = "rtbassoc-0bd3af89d44c3ab6e" -> null
+      - route_table_id = "rtb-0626bed0831231706" -> null
+      - subnet_id      = "subnet-091cb53cde2f5a18b" -> null
+    }
+
+  # module.subnets.aws_route_table_association.public[0] will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-0b9bc963f27a64293" -> null
+      - route_table_id = "rtb-025bbe4df51dea065" -> null
+      - subnet_id      = "subnet-09e4e142936b2d83a" -> null
+    }
+
+  # module.subnets.aws_route_table_association.public[1] will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-0dca805f0d16a0148" -> null
+      - route_table_id = "rtb-025bbe4df51dea065" -> null
+      - subnet_id      = "subnet-023871b75b6bbbb8d" -> null
+    }
+
+  # module.subnets.aws_route_table_association.public[2] will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-0a6dfb6e2a6e399ec" -> null
+      - route_table_id = "rtb-025bbe4df51dea065" -> null
+      - subnet_id      = "subnet-01ba667d8ecf13479" -> null
+    }
+
+  # module.subnets.aws_subnet.private[0] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                             = "arn:aws:ec2:us-west-2:662028814455:subnet/subnet-06460b59759808ae6" -> null
+      - assign_ipv6_address_on_creation = false -> null
+      - availability_zone               = "us-west-2a" -> null
+      - availability_zone_id            = "usw2-az1" -> null
+      - cidr_block                      = "10.0.0.0/19" -> null
+      - id                              = "subnet-06460b59759808ae6" -> null
+      - map_public_ip_on_launch         = false -> null
+      - owner_id                        = "662028814455" -> null
+      - tags                            = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2a"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc_id                          = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_subnet.private[1] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                             = "arn:aws:ec2:us-west-2:662028814455:subnet/subnet-01f68a89a048e7ca7" -> null
+      - assign_ipv6_address_on_creation = false -> null
+      - availability_zone               = "us-west-2b" -> null
+      - availability_zone_id            = "usw2-az2" -> null
+      - cidr_block                      = "10.0.32.0/19" -> null
+      - id                              = "subnet-01f68a89a048e7ca7" -> null
+      - map_public_ip_on_launch         = false -> null
+      - owner_id                        = "662028814455" -> null
+      - tags                            = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2b"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc_id                          = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_subnet.private[2] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                             = "arn:aws:ec2:us-west-2:662028814455:subnet/subnet-091cb53cde2f5a18b" -> null
+      - assign_ipv6_address_on_creation = false -> null
+      - availability_zone               = "us-west-2c" -> null
+      - availability_zone_id            = "usw2-az3" -> null
+      - cidr_block                      = "10.0.64.0/19" -> null
+      - id                              = "subnet-091cb53cde2f5a18b" -> null
+      - map_public_ip_on_launch         = false -> null
+      - owner_id                        = "662028814455" -> null
+      - tags                            = {
+          - "Attributes"          = "private"
+          - "Name"                = "iac-dev-ecp-private-us-west-2c"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "private"
+        } -> null
+      - vpc_id                          = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_subnet.public[0] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                             = "arn:aws:ec2:us-west-2:662028814455:subnet/subnet-09e4e142936b2d83a" -> null
+      - assign_ipv6_address_on_creation = false -> null
+      - availability_zone               = "us-west-2a" -> null
+      - availability_zone_id            = "usw2-az1" -> null
+      - cidr_block                      = "10.0.128.0/19" -> null
+      - id                              = "subnet-09e4e142936b2d83a" -> null
+      - map_public_ip_on_launch         = true -> null
+      - owner_id                        = "662028814455" -> null
+      - tags                            = {
+          - "Attributes"          = "public"
+          - "Name"                = "iac-dev-ecp-public-us-west-2a"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "public"
+        } -> null
+      - vpc_id                          = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_subnet.public[1] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                             = "arn:aws:ec2:us-west-2:662028814455:subnet/subnet-023871b75b6bbbb8d" -> null
+      - assign_ipv6_address_on_creation = false -> null
+      - availability_zone               = "us-west-2b" -> null
+      - availability_zone_id            = "usw2-az2" -> null
+      - cidr_block                      = "10.0.160.0/19" -> null
+      - id                              = "subnet-023871b75b6bbbb8d" -> null
+      - map_public_ip_on_launch         = true -> null
+      - owner_id                        = "662028814455" -> null
+      - tags                            = {
+          - "Attributes"          = "public"
+          - "Name"                = "iac-dev-ecp-public-us-west-2b"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "public"
+        } -> null
+      - vpc_id                          = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.subnets.aws_subnet.public[2] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                             = "arn:aws:ec2:us-west-2:662028814455:subnet/subnet-01ba667d8ecf13479" -> null
+      - assign_ipv6_address_on_creation = false -> null
+      - availability_zone               = "us-west-2c" -> null
+      - availability_zone_id            = "usw2-az3" -> null
+      - cidr_block                      = "10.0.192.0/19" -> null
+      - id                              = "subnet-01ba667d8ecf13479" -> null
+      - map_public_ip_on_launch         = true -> null
+      - owner_id                        = "662028814455" -> null
+      - tags                            = {
+          - "Attributes"          = "public"
+          - "Name"                = "iac-dev-ecp-public-us-west-2c"
+          - "Namespace"           = "iac"
+          - "Stage"               = "dev"
+          - "cpco.io/subnet/type" = "public"
+        } -> null
+      - vpc_id                          = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.vpc.aws_default_security_group.default will be destroyed
+  - resource "aws_default_security_group" "default" {
+      - arn                    = "arn:aws:ec2:us-west-2:662028814455:security-group/sg-031783e2203d3d78f" -> null
+      - egress                 = [] -> null
+      - id                     = "sg-031783e2203d3d78f" -> null
+      - ingress                = [] -> null
+      - name                   = "default" -> null
+      - owner_id               = "662028814455" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name" = "Default Security Group"
+        } -> null
+      - vpc_id                 = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.vpc.aws_internet_gateway.default will be destroyed
+  - resource "aws_internet_gateway" "default" {
+      - id       = "igw-055161e27697962d5" -> null
+      - owner_id = "662028814455" -> null
+      - tags     = {
+          - "Name"      = "iac-dev-vpc"
+          - "Namespace" = "iac"
+          - "Owner"     = "Terraform"
+          - "Stage"     = "dev"
+        } -> null
+      - vpc_id   = "vpc-06930f221f81bb801" -> null
+    }
+
+  # module.vpc.aws_vpc.default will be destroyed
+  - resource "aws_vpc" "default" {
+      - arn                              = "arn:aws:ec2:us-west-2::vpc/vpc-06930f221f81bb801" -> null
+      - assign_generated_ipv6_cidr_block = true -> null
+      - cidr_block                       = "10.0.0.0/16" -> null
+      - default_network_acl_id           = "acl-0a533d7a6677cc7a0" -> null
+      - default_route_table_id           = "rtb-07bd700659912d610" -> null
+      - default_security_group_id        = "sg-031783e2203d3d78f" -> null
+      - dhcp_options_id                  = "dopt-0ac8a75cb3483c1d8" -> null
+      - enable_classiclink               = false -> null
+      - enable_classiclink_dns_support   = false -> null
+      - enable_dns_hostnames             = true -> null
+      - enable_dns_support               = true -> null
+      - id                               = "vpc-06930f221f81bb801" -> null
+      - instance_tenancy                 = "default" -> null
+      - ipv6_association_id              = "vpc-cidr-assoc-03e40502883e187d5" -> null
+      - ipv6_cidr_block                  = "2600:1f14:2a7:4200::/56" -> null
+      - main_route_table_id              = "rtb-07bd700659912d610" -> null
+      - owner_id                         = "662028814455" -> null
+      - tags                             = {
+          - "Name"      = "iac-dev-vpc"
+          - "Namespace" = "iac"
+          - "Owner"     = "Terraform"
+          - "Stage"     = "dev"
+        } -> null
+    }
+
+Plan: 0 to add, 0 to change, 60 to destroy.
+
+------------------------------------------------------------------------
+
+This plan was saved to: ./destroy/iac-cluster.destroy
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "./destroy/iac-cluster.destroy"
+```
+
 ```
 $ terraform apply "./destroy/iac-cluster.destroy"
 ```
+
+```yaml
+ terraform apply "./destroy/iac-cluster.destroy"
+module.aws_key_pair.null_resource.chmod[0]: Destroying... [id=9145674845761086373]
+module.aws_key_pair.local_file.public_key_openssh[0]: Destroying... [id=76b45103a42dfd5ea48cf78e43c571ba3835662d]
+module.aws_key_pair.null_resource.chmod[0]: Destruction complete after 0s
+module.aws_key_pair.local_file.public_key_openssh[0]: Destruction complete after 0s
+module.subnets.aws_network_acl.public[0]: Destroying... [id=acl-098887751d5dd5b90]
+aws_security_group_rule.rds_ingress[0]: Destroying... [id=sgrule-2269282911]
+module.vpc.aws_default_security_group.default: Destroying... [id=sg-031783e2203d3d78f]
+aws_security_group_rule.ingress[1]: Destroying... [id=sgrule-631296820]
+module.subnets.aws_route.default[0]: Destroying... [id=r-rtb-0412971a9a2b0af171080289494]
+module.vpc.aws_default_security_group.default: Destruction complete after 0s
+aws_security_group_rule.ingress[0]: Destroying... [id=sgrule-2469039745]
+aws_security_group_rule.ingress[2]: Destroying... [id=sgrule-3233341605]
+module.subnets.aws_route_table_association.public[2]: Destroying... [id=rtbassoc-0a6dfb6e2a6e399ec]
+aws_security_group_rule.ingress[3]: Destroying... [id=sgrule-47396811]
+module.subnets.aws_route.default[1]: Destroying... [id=r-rtb-0514727ce29bf5a411080289494]
+module.subnets.aws_route.default[2]: Destroying... [id=r-rtb-0626bed08312317061080289494]
+module.subnets.aws_route.default[0]: Destruction complete after 1s
+module.subnets.aws_route.default[1]: Destruction complete after 1s
+module.subnets.aws_route_table_association.public[2]: Destruction complete after 1s
+module.subnets.aws_route_table_association.private[0]: Destroying... [id=rtbassoc-0b2140ea42b1b8b3c]
+module.subnets.aws_route_table_association.public[1]: Destroying... [id=rtbassoc-0dca805f0d16a0148]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Destroying... [id=iac-dev-rds-1]
+module.subnets.aws_route.default[2]: Destruction complete after 1s
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_low[0]: Destroying... [id=iac-dev-ec2-asg-cpu-utilization-low]
+aws_security_group_rule.rds_ingress[0]: Destruction complete after 1s
+aws_security_group_rule.ingress[1]: Destruction complete after 1s
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_high[0]: Destroying... [id=iac-dev-ec2-asg-cpu-utilization-high]
+aws_security_group_rule.rds_ingress[1]: Destroying... [id=sgrule-1111972389]
+module.subnets.aws_route_table_association.public[1]: Destruction complete after 0s
+module.subnets.aws_route_table_association.private[0]: Destruction complete after 0s
+aws_security_group_rule.rds_egress[0]: Destroying... [id=sgrule-3431259760]
+aws_security_group_rule.egress[0]: Destroying... [id=sgrule-1417906670]
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_low[0]: Destruction complete after 1s
+module.subnets.aws_route_table_association.private[2]: Destroying... [id=rtbassoc-0bd3af89d44c3ab6e]
+aws_security_group_rule.rds_ingress[1]: Destruction complete after 1s
+module.subnets.aws_route.public[0]: Destroying... [id=r-rtb-025bbe4df51dea0651080289494]
+module.iac-dev-ecp.aws_cloudwatch_metric_alarm.cpu_high[0]: Destruction complete after 1s
+module.subnets.aws_network_acl.private[0]: Destroying... [id=acl-0037a6c512b9ea029]
+module.subnets.aws_route_table_association.private[2]: Destruction complete after 5s
+module.subnets.aws_route_table_association.private[1]: Destroying... [id=rtbassoc-09b1c565668e1380e]
+module.subnets.aws_route.public[0]: Destruction complete after 5s
+module.subnets.aws_route_table_association.public[0]: Destroying... [id=rtbassoc-0b9bc963f27a64293]
+aws_security_group_rule.ingress[0]: Destruction complete after 7s
+aws_security_group_rule.rds_ingress_dynamic[0]: Destroying... [id=sgrule-214679645]
+aws_security_group_rule.rds_egress[0]: Destruction complete after 6s
+module.aws_key_pair.local_file.private_key_pem[0]: Destroying... [id=3aafbae020fc12f3acbdfce253f61a716013ed4c]
+module.aws_key_pair.local_file.private_key_pem[0]: Destruction complete after 0s
+module.subnets.aws_nat_gateway.default[2]: Destroying... [id=nat-06ba0fed9a127dbc1]
+module.subnets.aws_network_acl.public[0]: Still destroying... [id=acl-098887751d5dd5b90, 10s elapsed]
+aws_security_group_rule.ingress[2]: Still destroying... [id=sgrule-3233341605, 10s elapsed]
+aws_security_group_rule.ingress[3]: Still destroying... [id=sgrule-47396811, 10s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 10s elapsed]
+aws_security_group_rule.egress[0]: Still destroying... [id=sgrule-1417906670, 10s elapsed]
+module.subnets.aws_network_acl.private[0]: Still destroying... [id=acl-0037a6c512b9ea029, 10s elapsed]
+module.subnets.aws_route_table_association.public[0]: Destruction complete after 5s
+module.subnets.aws_nat_gateway.default[0]: Destroying... [id=nat-0893089d49c77ee11]
+module.subnets.aws_route_table_association.private[1]: Destruction complete after 5s
+module.subnets.aws_nat_gateway.default[1]: Destroying... [id=nat-0622789960bb7daa0]
+aws_security_group_rule.rds_ingress_dynamic[0]: Destruction complete after 5s
+aws_security_group_rule.ingress[2]: Destruction complete after 12s
+module.iac-dev-ecp.aws_autoscaling_policy.scale_up[0]: Destroying... [id=iac-dev-ec2-asg-scale-up]
+module.iac-dev-ecp.aws_autoscaling_policy.scale_down[0]: Destroying... [id=iac-dev-ec2-asg-scale-down]
+aws_security_group_rule.ingress[3]: Destruction complete after 13s
+module.vpc.aws_internet_gateway.default: Destroying... [id=igw-055161e27697962d5]
+module.subnets.aws_network_acl.public[0]: Destruction complete after 13s
+module.subnets.aws_route_table.public[0]: Destroying... [id=rtb-025bbe4df51dea065]
+aws_security_group_rule.egress[0]: Destruction complete after 13s
+module.subnets.aws_route_table.private[0]: Destroying... [id=rtb-0412971a9a2b0af17]
+module.subnets.aws_nat_gateway.default[2]: Still destroying... [id=nat-06ba0fed9a127dbc1, 10s elapsed]
+module.iac-dev-ecp.aws_autoscaling_policy.scale_down[0]: Destruction complete after 6s
+module.subnets.aws_route_table.private[2]: Destroying... [id=rtb-0626bed0831231706]
+module.iac-dev-ecp.aws_autoscaling_policy.scale_up[0]: Destruction complete after 6s
+module.subnets.aws_route_table.private[1]: Destroying... [id=rtb-0514727ce29bf5a41]
+module.subnets.aws_route_table.public[0]: Destruction complete after 6s
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Destroying... [id=iac-dev-ec2-asg-20200210203901665700000003]
+module.subnets.aws_route_table.private[0]: Destruction complete after 5s
+module.subnets.aws_route_table.private[1]: Destruction complete after 1s
+module.subnets.aws_route_table.private[2]: Destruction complete after 1s
+module.subnets.aws_network_acl.private[0]: Destruction complete after 18s
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 20s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still destroying... [id=nat-0893089d49c77ee11, 10s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still destroying... [id=nat-0622789960bb7daa0, 10s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 10s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Still destroying... [id=nat-06ba0fed9a127dbc1, 20s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 10s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 30s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still destroying... [id=nat-0893089d49c77ee11, 20s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still destroying... [id=nat-0622789960bb7daa0, 20s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 20s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Still destroying... [id=nat-06ba0fed9a127dbc1, 30s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 20s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 40s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still destroying... [id=nat-0893089d49c77ee11, 30s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still destroying... [id=nat-0622789960bb7daa0, 30s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 30s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Still destroying... [id=nat-06ba0fed9a127dbc1, 40s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 30s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 50s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still destroying... [id=nat-0893089d49c77ee11, 40s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still destroying... [id=nat-0622789960bb7daa0, 40s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 40s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Still destroying... [id=nat-06ba0fed9a127dbc1, 50s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 40s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 1m0s elapsed]
+module.subnets.aws_nat_gateway.default[0]: Still destroying... [id=nat-0893089d49c77ee11, 50s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still destroying... [id=nat-0622789960bb7daa0, 50s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 50s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Still destroying... [id=nat-06ba0fed9a127dbc1, 1m0s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 50s elapsed]
+module.subnets.aws_nat_gateway.default[2]: Destruction complete after 1m2s
+module.subnets.aws_nat_gateway.default[0]: Destruction complete after 57s
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 1m10s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still destroying... [id=nat-0622789960bb7daa0, 1m0s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 1m0s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 1m0s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 1m20s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Still destroying... [id=nat-0622789960bb7daa0, 1m10s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 1m10s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 1m10s elapsed]
+module.subnets.aws_nat_gateway.default[1]: Destruction complete after 1m18s
+module.subnets.aws_eip.default[2]: Destroying... [id=eipalloc-0c9ebae8a02b3add0]
+module.subnets.aws_eip.default[0]: Destroying... [id=eipalloc-0ee98473a1c471528]
+module.subnets.aws_eip.default[1]: Destroying... [id=eipalloc-0ea37feffa5670376]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 1m30s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 1m20s elapsed]
+module.subnets.aws_eip.default[0]: Destruction complete after 6s
+module.subnets.aws_eip.default[1]: Destruction complete after 6s
+module.subnets.aws_eip.default[2]: Destruction complete after 6s
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 1m20s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 1m40s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 1m30s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 1m30s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 1m50s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 1m40s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Still destroying... [id=iac-dev-ec2-asg-20200210203901665700000003, 1m40s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 2m0s elapsed]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 1m50s elapsed]
+module.iac-dev-ecp.aws_autoscaling_group.default[0]: Destruction complete after 1m48s
+aws_elb.iac-dev-asg-elb: Destroying... [id=iac-dev-asg-elb]
+module.iac-dev-ecp.aws_launch_template.default[0]: Destroying... [id=lt-0a2928df81bb94676]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 2m10s elapsed]
+module.iac-dev-ecp.aws_launch_template.default[0]: Destruction complete after 5s
+module.aws_key_pair.aws_key_pair.generated[0]: Destroying... [id=iac-dev-jeffrymilan]
+module.aws_key_pair.aws_key_pair.generated[0]: Destruction complete after 0s
+module.aws_key_pair.tls_private_key.default[0]: Destroying... [id=1af8cdb01a0d33950630bf133e6aff7628283d38]
+module.aws_key_pair.tls_private_key.default[0]: Destruction complete after 0s
+aws_elb.iac-dev-asg-elb: Destruction complete after 6s
+module.subnets.aws_subnet.public[0]: Destroying... [id=subnet-09e4e142936b2d83a]
+module.subnets.aws_subnet.public[1]: Destroying... [id=subnet-023871b75b6bbbb8d]
+module.subnets.aws_subnet.public[2]: Destroying... [id=subnet-01ba667d8ecf13479]
+aws_security_group.iac-dev-ec2-sg: Destroying... [id=sg-0f202a554030214fb]
+module.vpc.aws_internet_gateway.default: Still destroying... [id=igw-055161e27697962d5, 2m0s elapsed]
+module.subnets.aws_subnet.public[2]: Destruction complete after 0s
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 2m20s elapsed]
+module.subnets.aws_subnet.public[0]: Destruction complete after 8s
+module.subnets.aws_subnet.public[1]: Destruction complete after 8s
+aws_security_group.iac-dev-ec2-sg: Destruction complete after 9s
+module.vpc.aws_internet_gateway.default: Destruction complete after 2m10s
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 2m30s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 2m40s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 2m50s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 3m0s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 3m10s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 3m20s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 3m30s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Still destroying... [id=iac-dev-rds-1, 3m40s elapsed]
+module.rds_cluster.aws_rds_cluster_instance.default[0]: Destruction complete after 3m47s
+module.rds_cluster.aws_db_parameter_group.default[0]: Destroying... [id=iac-dev-rds]
+module.rds_cluster.aws_rds_cluster.default[0]: Destroying... [id=iac-dev-rds]
+module.rds_cluster.aws_db_parameter_group.default[0]: Destruction complete after 0s
+module.rds_cluster.aws_rds_cluster.default[0]: Still destroying... [id=iac-dev-rds, 10s elapsed]
+module.rds_cluster.aws_rds_cluster.default[0]: Still destroying... [id=iac-dev-rds, 20s elapsed]
+module.rds_cluster.aws_rds_cluster.default[0]: Still destroying... [id=iac-dev-rds, 30s elapsed]
+module.rds_cluster.aws_rds_cluster.default[0]: Still destroying... [id=iac-dev-rds, 40s elapsed]
+module.rds_cluster.aws_rds_cluster.default[0]: Still destroying... [id=iac-dev-rds, 50s elapsed]
+module.rds_cluster.aws_rds_cluster.default[0]: Destruction complete after 51s
+module.rds_cluster.aws_rds_cluster_parameter_group.default[0]: Destroying... [id=iac-dev-rds]
+module.rds_cluster.aws_db_subnet_group.default[0]: Destroying... [id=iac-dev-rds]
+module.rds_cluster.aws_security_group.default[0]: Destroying... [id=sg-0a5f58ec1536230f7]
+module.rds_cluster.aws_db_subnet_group.default[0]: Destruction complete after 0s
+module.subnets.aws_subnet.private[2]: Destroying... [id=subnet-091cb53cde2f5a18b]
+module.subnets.aws_subnet.private[0]: Destroying... [id=subnet-06460b59759808ae6]
+module.subnets.aws_subnet.private[1]: Destroying... [id=subnet-01f68a89a048e7ca7]
+module.rds_cluster.aws_rds_cluster_parameter_group.default[0]: Destruction complete after 0s
+module.rds_cluster.aws_security_group.default[0]: Destruction complete after 0s
+aws_security_group.iac-dev-rds-sg: Destroying... [id=sg-091cd0f41fce76446]
+module.subnets.aws_subnet.private[2]: Destruction complete after 1s
+module.subnets.aws_subnet.private[0]: Destruction complete after 1s
+module.subnets.aws_subnet.private[1]: Destruction complete after 1s
+aws_security_group.iac-dev-rds-sg: Destruction complete after 6s
+module.vpc.aws_vpc.default: Destroying... [id=vpc-06930f221f81bb801]
+module.vpc.aws_vpc.default: Destruction complete after 0s
+
+Apply complete! Resources: 0 added, 0 changed, 60 destroyed.
+
+Outputs:
+
+arn = 
+autoscaling_group_arn = 
+autoscaling_group_default_cooldown = 
+autoscaling_group_desired_capacity = 
+autoscaling_group_health_check_grace_period = 
+autoscaling_group_health_check_type = 
+autoscaling_group_id = 
+autoscaling_group_max_size = 
+autoscaling_group_min_size = 
+autoscaling_group_name = 
+cluster_identifier = 
+cluster_resource_id = 
+database_name = 
+dbi_resource_ids = []
+endpoint = 
+launch_template_arn = 
+launch_template_id = 
+master_host = 
+master_username = 
+private_subnet_cidrs = []
+public_subnet_cidrs = []
+reader_endpoint = 
+replicas_host =
+```
+
+
 
 ### END - Thank you.

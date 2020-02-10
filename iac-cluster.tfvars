@@ -23,7 +23,7 @@ allowed_ports      = [22, 80, 8080, 443]
 
 
 #keypair
-ssh_name           = "iac-cluster"
+ssh_name           = "jeffrymilan"
 
 ssh_public_key_path = "./secrets"
 
